@@ -3,7 +3,7 @@ import './style.css'
 import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
-import as "GUI" from "babylonjs-gui";
+import * as GUI from "babylonjs-gui";
 
 //创建canvas
 const canvas = document.createElement("canvas");
