@@ -1,9 +1,8 @@
 import './style.css'
-//导入babylonjs test1111
+//导入babylonjs
 import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
-import * as GUI from 'babylonjs-gui';
 
 //创建canvas
 const canvas = document.createElement("canvas");
