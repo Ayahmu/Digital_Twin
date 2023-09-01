@@ -1,0 +1,21 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^6.17.0",
+    "@babylonjs/gui": "^6.17.0",
+    "babylonjs": "^6.18.0",
+    "babylonjs-gui": "^6.17.0",
+    "babylonjs-loaders": "^6.17.0"
+  }
+}
