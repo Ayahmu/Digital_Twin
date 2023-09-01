@@ -1,5 +1,5 @@
 import './style.css'
-//导入babylonjs
+//导入babylonjs test1111
 import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
