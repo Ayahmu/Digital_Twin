@@ -9,3 +9,15 @@ canvas{
   width: 100vw;
   height: 100vh;
 }
+#panelContainer {
+  position: relative;
+  z-index: 1;
+}
+#fpsDisplay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  color: greenyellow;
+  z-index: 2;
+}

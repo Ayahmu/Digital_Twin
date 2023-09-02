@@ -56,7 +56,7 @@ actionManager.registerAction(
                 case "气控模块_primitive0":
                     removeLabel(rmLabelBuild);
                     createLabel(event.meshUnderPointer,event.meshUnderPointer.id);
-                    moveCameraPosition(new BABYLON.Vector3(0,20,70));
+                    moveCameraPosition(new BABYLON.Vector3(0,40,70));
                     break;
             }
         }
@@ -103,7 +103,7 @@ function removeLabel(arr) {
 
 function moveCameraPosition(targetPosition){
     var ease = new BABYLON.CubicEase();
-    ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+    ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEIN);
 
     BABYLON.Animation.CreateAndStartAnimation(
         'moveCamera',
@@ -116,19 +116,34 @@ function moveCameraPosition(targetPosition){
         0,
         ease,
         ()=>{
-            console.log("1");
-        },
-        ()=>{
-            console.log("2");
+            moveCameraTarget(new BABYLON.Vector3(20,10,0))
         });
 
+}
 
+function moveCameraTarget(targetPosition){
+    var ease = new BABYLON.CubicEase();
+    ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
+
+    BABYLON.Animation.CreateAndStartAnimation(
+        'moveCamera',
+        camera,
+        'target',
+        30,
+        60,
+        camera.getTarget(),
+        targetPosition,
+        0,
+        ease,
+        ()=>{
+            console.log("1");
+        });
 }
 
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "Test1.glb",scene,
+    "test.glb",scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
         console.log(importedMesh)
@@ -190,6 +205,13 @@ const light = new BABYLON.DirectionalLight(
 light.intensity = 10;
 
 
+scene.registerBeforeRender(function(){
+    //计算帧率
+    var fps = engine.getFps().toFixed();
+
+    var fpsDisplay = document.getElementById("fpsDisplay");
+    fpsDisplay.innerHTML = "FPS:" + fps;
+})
 
 //渲染场景
 engine.runRenderLoop(() => {
