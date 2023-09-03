@@ -143,7 +143,7 @@ function moveCameraTarget(targetPosition){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "test.glb",scene,
+    "hj.glb",scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
         console.log(importedMesh)
