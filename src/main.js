@@ -216,7 +216,7 @@ scene.registerBeforeRender(function(){
 //渲染场景
 engine.runRenderLoop(() => {
     scene.render();
-    //console.log(camera.position);
+    console.log(camera.position);
 })
 
 //监听窗口大小改变
