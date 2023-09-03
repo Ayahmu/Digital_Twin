@@ -65,21 +65,23 @@ actionManager.registerAction(
     )
 )
 
-var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
 let rmLabelBuild = [];
 
 function createLabel(mesh, labelName) {
     var label = new GUI.Rectangle("label for " + labelName);
     label.background = "rgba(0, 0, 0, 1)";
-    label.height = "60px";
+    label.top = "0%";
+    label.left = "-39.5%";
+    label.height = "100%";
     label.alpha = 0.6;
-    label.width = "300px";
+    label.width = "20%";
     label.cornerRadius = 20;
     label.thickness = 1;
     label.linkOffsetY = -100;
     advancedTexture.addControl(label);
-    label.linkWithMesh(mesh);
+    //label.linkWithMesh(mesh);
     var text1 = new GUI.TextBlock();
     text1.text = labelName;
     text1.color = "white";
