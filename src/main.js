@@ -4,13 +4,38 @@ import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
-
+import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
 //创建canvas
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 //将canvas添加到body中
 document.body.appendChild(canvas);
+
+let objectArray = null;
+//读取json数据
+function MyObject(ID, Name, Info, Manual, Url, LocID) {
+    this.ID = ID;
+    this.Name = Name;
+    this.Info = Info;
+    this.Manual = Manual;
+    this.Url = Url;
+    this.LocID = LocID;
+  }
+
+console.log('读取到的 JSON 数据：', data);
+// 创建对象实例并存储在数组中
+objectArray = data.map(jsonObject => new MyObject(
+      jsonObject.ID,
+      jsonObject.Name,
+      jsonObject.Info,
+      jsonObject.Manual,
+      jsonObject.Url,
+      jsonObject.LocID
+    )); 
+// 打印封装后的对象数组
+console.log('对象数组：', objectArray);
+
 
 //创建引擎，第二个参数为抗锯齿
 const engine = new BABYLON.Engine(canvas,true,{stencil:true});
