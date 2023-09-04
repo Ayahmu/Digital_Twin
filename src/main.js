@@ -9,8 +9,7 @@ import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-console.log(window.innerWidth);
-console.log(window.innerHeight);
+
 //将canvas添加到body中
 document.body.appendChild(canvas);
 
