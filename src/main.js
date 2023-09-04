@@ -110,6 +110,13 @@ function createLabel(mesh, labelName) {
     label.linkOffsetY = -100;
     advancedTexture.addControl(label);
     //label.linkWithMesh(mesh);
+    var text0 = new GUI.TextBlock();
+    text0.text = "控制柜";
+    text0.fontSize = 30;
+    text0.color = "white";
+    text0.width = "90%";
+    text0.height = "40px";
+    label.addControl(text0);
     var text1 = new GUI.TextBlock();
     text1.text = labelName;
     text1.color = "white";
@@ -119,9 +126,73 @@ function createLabel(mesh, labelName) {
     label.addControl(button);
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     rmLabelBuild.push(label);
+    rmLabelBuild.push(text0);
     rmLabelBuild.push(text1);
     models.push(mesh);
 }
+
+function createLabel1()
+{
+
+    // 创建主要的长方形面板
+    var panel = new GUI.StackPanel();
+    panel.width = "400px"; // 设置宽度
+    panel.height = "700px"; // 设置高度
+    advancedTexture.addControl(panel);
+
+    panel.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    panel.paddingLeftInPixels = 50;
+
+    panel.background = 'rgba(128, 128, 128, 0.5)';
+
+    // 第一部分：文本块，占长方形高度的15%
+    var textBlock1 = new GUI.TextBlock();
+    textBlock1.text = "第一部分";
+    textBlock1.height = "15%";
+    panel.addControl(textBlock1);
+
+    // 第二部分：两个按钮，同一水平线，占长方形高度的15%
+    var button1 = new GUI.Button("button1", "按钮1");
+    button1.width = "40%";
+    button1.height = "5%";
+    button1.background = 'rgba(128, 128, 128, 1)';
+    button1.paddingTopInPixels = 280;
+    button1.paddingLeftInPixels = 0;
+    button1.onPointerUpObservable.add(function() {
+        console.log(1);
+    });
+    panel.addControl(button1);
+
+    var button2 = new GUI.Button("button2", "按钮2");
+    button2.width = "40%";
+    button2.height = "5%";    
+    button2.background = 'rgba(128, 64, 128, 1)';
+    button2.paddingTopInPixels = 180;
+    button2.paddingRightInPixels = 0;
+    button2.onPointerUpObservable.add(function() {
+        console.log(2);
+    });
+    panel.addControl(button2);
+
+    // 第三部分：文本显示，占长方形高度的70%
+    var textBlock2 = new GUI.TextBlock();
+    textBlock2.text = "第三部分";
+    textBlock2.height = "70%";
+    panel.addControl(textBlock2);
+}
+
+function createLabel2()
+{
+    const selectBox = new GUI.SelectionPanel("selectBox");
+    selectBox.width = 0.25;
+    selectBox.height = 0.52;
+    selectBox.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    selectBox.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+    advancedTexture.addControl(selectBox);
+}
+
+createLabel2();
 
 function removeLabel(arr) {
     //清除面板
