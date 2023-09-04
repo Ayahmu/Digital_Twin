@@ -49,10 +49,10 @@ const camera = new BABYLON.ArcRotateCamera(
     0,//相机水平旋转角度
     0,//相机垂直旋转角度
     10,//相机旋转半径
-    BABYLON.Vector3.Zero(),//相机目标点
+    new BABYLON.Vector3(85,30,275),//相机目标点
     scene//相机所在场景
 );
-camera.position = new BABYLON.Vector3(0,10,10);
+camera.position = new BABYLON.Vector3(90,70,100);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -67,6 +67,7 @@ const actionManager = new BABYLON.ActionManager(scene);
 let hydrogenProductionModule;
 let purificationModule;
 let airControlModule;
+let childMesh = [];
 
 //模型数组
 let models = []
@@ -76,9 +77,10 @@ actionManager.registerAction(
         BABYLON.ActionManager.OnPickTrigger,//鼠标点击触发
         function (event){
             switch (event.meshUnderPointer.id){
-                case "制氢模块_primitive0":
-                case "净化模块_primitive0":
-                case "气控模块_primitive0":
+                case "Mesh.004":
+                case "Mesh.005":
+                case "Mesh.020":
+                default:
                     removeLabel(rmLabelBuild);
                     createLabel(event.meshUnderPointer,event.meshUnderPointer.id);
                     //moveCameraPosition(new BABYLON.Vector3(0,40,70));
@@ -88,23 +90,25 @@ actionManager.registerAction(
     )
 )
 
-var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("ui1");
+var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
 let rmLabelBuild = [];
 
 function createLabel(mesh, labelName) {
     var label = new GUI.Rectangle("label for " + labelName);
     label.background = "rgba(0, 0, 0, 1)";
-    label.height = "60px";
+    label.top = "0%";
+    label.left = "-39.5%";
+    label.height = "100%";
     label.alpha = 0.6;
-    label.width = "300px";
+    label.width = "20%";
     label.cornerRadius = 20;
     label.thickness = 1;
     label.linkOffsetY = -100;
     advancedTexture.addControl(label);
-    label.linkWithMesh(mesh);
+    //label.linkWithMesh(mesh);
     var text1 = new GUI.TextBlock();
-    text1.text = labelName.substring(0,labelName.length - "_primitive0".length);
+    text1.text = labelName;
     text1.color = "white";
     label.addControl(text1);
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
@@ -168,37 +172,31 @@ function moveCameraTarget(targetPosition){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "test.glb",scene,
+    "Draco.glb",
+    scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
         console.log(importedMesh)
         importedMesh.getChildren().forEach(function (mesh){
-            if(mesh.name === "制氢模块"){
-                mesh.getChildren().forEach(function (mesh){
-                    if(mesh.name === "制氢模块_primitive0"){
-                        hydrogenProductionModule = mesh;
-                        mesh.actionManager = actionManager;
-                    }
-                })
+            if(mesh.name === "Mesh.004"){
+                hydrogenProductionModule = mesh;
+                mesh.actionManager = actionManager;
             }
-            if(mesh.name === "净化模块"){
-                mesh.getChildren().forEach(function (mesh){
-                    if(mesh.name === "净化模块_primitive0"){
-                        purificationModule = mesh;
-                        mesh.actionManager = actionManager;
-                    }
-                })
+            if(mesh.name === "Mesh.020"){
+                purificationModule = mesh;
+                mesh.actionManager = actionManager;
             }
-            if(mesh.name === "气控模块"){
-                mesh.getChildren().forEach(function (mesh){
-                    if(mesh.name === "气控模块_primitive0"){
-                        airControlModule = mesh;
-                        mesh.actionManager = actionManager;
-                    }
-                })
+            if(mesh.name === "Mesh.005"){
+                airControlModule = mesh;
+                mesh.actionManager = actionManager;
+            }else {
+                childMesh.push(mesh);
+                mesh.actionManager = actionManager;
             }
         });
 });
+
+
 
 //鼠标按下时取消绑定事件,防止卡顿
 scene.onPointerObservable.add((pointerInfo) => {
@@ -208,16 +206,25 @@ scene.onPointerObservable.add((pointerInfo) => {
             hydrogenProductionModule.actionManager = null;
             purificationModule.actionManager = null;
             airControlModule.actionManager = null;
+            childMesh.forEach(function (mesh){
+                mesh.actionManager = null;
+            })
             break;
         case BABYLON.PointerEventTypes.POINTERUP:
             hydrogenProductionModule.actionManager = actionManager;
             purificationModule.actionManager = actionManager;
             airControlModule.actionManager = actionManager;
+            childMesh.forEach(function (mesh){
+                mesh.actionManager = actionManager;
+            })
             break;
         case BABYLON.PointerEventTypes.POINTERPICK:
             hydrogenProductionModule.actionManager = actionManager;
             purificationModule.actionManager = actionManager;
             airControlModule.actionManager = actionManager;
+            childMesh.forEach(function (mesh){
+                mesh.actionManager = actionManager;
+            })
             break;
     }
 });
