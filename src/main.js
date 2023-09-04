@@ -4,13 +4,38 @@ import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
-
+import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
 //创建canvas
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 //将canvas添加到body中
 document.body.appendChild(canvas);
+
+let objectArray = null;
+//读取json数据
+function MyObject(ID, Name, Info, Manual, Url, LocID) {
+    this.ID = ID;
+    this.Name = Name;
+    this.Info = Info;
+    this.Manual = Manual;
+    this.Url = Url;
+    this.LocID = LocID;
+  }
+
+console.log('读取到的 JSON 数据：', data);
+// 创建对象实例并存储在数组中
+objectArray = data.map(jsonObject => new MyObject(
+      jsonObject.ID,
+      jsonObject.Name,
+      jsonObject.Info,
+      jsonObject.Manual,
+      jsonObject.Url,
+      jsonObject.LocID
+    )); 
+// 打印封装后的对象数组
+console.log('对象数组：', objectArray);
+
 
 //创建引擎，第二个参数为抗锯齿
 const engine = new BABYLON.Engine(canvas,true,{stencil:true});
@@ -56,7 +81,7 @@ actionManager.registerAction(
                 case "气控模块_primitive0":
                     removeLabel(rmLabelBuild);
                     createLabel(event.meshUnderPointer,event.meshUnderPointer.id);
-                    moveCameraPosition(new BABYLON.Vector3(0,40,70));
+                    //moveCameraPosition(new BABYLON.Vector3(0,40,70));
                     break;
             }
         }
@@ -143,7 +168,7 @@ function moveCameraTarget(targetPosition){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "hj.glb",scene,
+    "test.glb",scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
         console.log(importedMesh)
@@ -216,7 +241,7 @@ scene.registerBeforeRender(function(){
 //渲染场景
 engine.runRenderLoop(() => {
     scene.render();
-    console.log(camera.position);
+    //console.log(camera.position);
 })
 
 //监听窗口大小改变
