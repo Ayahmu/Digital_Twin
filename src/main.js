@@ -9,6 +9,8 @@ import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+console.log(window.innerWidth);
+console.log(window.innerHeight);
 //将canvas添加到body中
 document.body.appendChild(canvas);
 
@@ -35,6 +37,7 @@ objectArray = data.map(jsonObject => new MyObject(
     )); 
 // 打印封装后的对象数组
 console.log('对象数组：', objectArray);
+
 
 
 //创建引擎，第二个参数为抗锯齿
@@ -92,6 +95,7 @@ actionManager.registerAction(
 
 var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
+
 let rmLabelBuild = [];
 
 function createLabel(mesh, labelName) {
@@ -110,7 +114,10 @@ function createLabel(mesh, labelName) {
     var text1 = new GUI.TextBlock();
     text1.text = labelName;
     text1.color = "white";
+    text1.position = new BABYLON.Vector2(0,0);
     label.addControl(text1);
+    var button = new GUI.Button();
+    label.addControl(button);
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     rmLabelBuild.push(label);
     rmLabelBuild.push(text1);
