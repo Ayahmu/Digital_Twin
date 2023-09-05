@@ -42,6 +42,7 @@ console.log('对象数组：', objectArray);
 //创建引擎，第二个参数为抗锯齿
 const engine = new BABYLON.Engine(canvas,true,{stencil:true});
 
+
 //创建场景
 const scene = new BABYLON.Scene(engine,false);
 
@@ -93,6 +94,7 @@ actionManager.registerAction(
 )
 
 var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+let presentTextBlock;
 advancedTexture.renderScale = 1;
 
 let rmLabelBuild = [];
@@ -100,130 +102,122 @@ let rmLabelBuild = [];
 function createLabel(mesh, labelName) {
     var label = new GUI.Grid();
     label.addRowDefinition(12);  // 第一部分占百分之十五
-    label.addRowDefinition(15);  // 第三部分占百分之七十
-    label.addRowDefinition(72);  // 第二部分占百分之十五
-    label.background = "rgba(0, 0, 0, 1)";
-    label.top = "0%";
-    label.left = "-39.5%";
-    label.height = "80%";
-    label.alpha = 0.6;
-    label.width = "20%";
-    label.cornerRadius = 40;
+    label.addRowDefinition(12);  // 第三部分占百分之七十
+    label.addRowDefinition(76);  // 第二部分占百分之十五
+    label.background = "rgba(0, 0, 0, 0.6)";
+    label.height = "600px";
+    label.width = "380px";
+    label.cornerRadius = 20;
     label.thickness = 1;
     label.linkOffsetY = -100;
     label.isPointerBlocker = false; // 允许鼠标事件穿透
-    label.paddingRightInPixels = 50;
-
-    // 创建第三行的按钮1
-    var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
-    button1.background = "black";
-    button1.color = "white";
-    button1.isPointerBlocker = true;
-    button1.cornerRadius = 10;
-    button1.onPointerClickObservable.add(function() {
-        // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
-    });
-
-    // 创建第三行的按钮2
-    var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
-    button2.background = "black";
-    button2.color = "white";
-    button2.isPointerBlocker = true;
-    button2.cornerRadius = 10;
-    button2.onPointerClickObservable.add(function() {
-        // 添加按钮2的点击事件处理
-        console.log("按钮2被点击");
-    });
-
+    label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    label.paddingLeftInPixels = 15;
+    
+    var textBlock1 = new GUI.TextBlock();
+    textBlock1.text = labelName + "\n" + "\n" + "111";
+    textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    textBlock1.color = "white";
+    
+    var textBlock2 = new GUI.TextBlock();
+    textBlock2.text = labelName + "\n" + "\n" + "111";
+    textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    textBlock2.color = "blue";
+    
     // 创建第一部分
-  
-    var panel = new GUI.Rectangle();
-    panel.background = "black"; // 背景颜色
-    panel.width = "160px";
-    panel.height = "60px";
-    panel.cornerRadius = 10;
-
-    var part1 = new GUI.TextBlock();
-    part1.width = "100px";
-    part1.height = "20px";
-    part1.text = "控制柜";
-    part1.color = "white";
-    panel.addControl(part1);
-    label.addControl(panel, 0, 0);
-
-    // 创建第三部分
-    var part3 = new GUI.TextBlock();
-    part3.text = labelName + "\n" + "\n" + "111";
-    part3.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    part3.background = "red";
-    label.addControl(part3, 2, 0);
-
+    var part1 = new GUI.Rectangle();
+    part1.background = "black"; // 背景颜色
+    part1.width = "160px";
+    part1.height = "60px";
+    part1.alpha = 1;
+    part1.cornerRadius = 10;
+    part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    
+    var textBlock0 = new GUI.TextBlock();
+    textBlock0.text = "控制柜";
+    textBlock0.color = "white";
+    textBlock0.fontSize = 18;
+    part1.addControl(textBlock0);
+    
+    // 使用布局对齐和填充来调整元素位置
+    part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part1.paddingTopInPixels = 10;
+    
+    label.addControl(part1, 0, 0);
+    
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
     part2.addColumnDefinition(50);  // 第一列占百分之五十
     part2.addColumnDefinition(50);  // 第二列占百分之五十
-
+    
+    var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
+    button1.width = "120px";
+    button1.height = "50px";
+    button1.background = "black";
+    button1.color = "white";
+    button1.isPointerBlocker = true;
+    button1.cornerRadius = 10;
+    button1.textBlock.fontSize = 14;
+    button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    button1.onPointerClickObservable.add(function() {
+        // 添加按钮1的点击事件处理
+        console.log("按钮1被点击");
+        part3.removeControl(presentTextBlock);
+        presentTextBlock = textBlock1;
+        part3.addControl(presentTextBlock);
+    });
+    var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
+    button2.width = "120px";
+    button2.height = "50px";
+    button2.background = "black";
+    button2.color = "white";
+    button2.isPointerBlocker = true;
+    button2.cornerRadius = 10;
+    button2.textBlock.fontSize = 14;
+    button2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    button2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    button2.onPointerClickObservable.add(function() {
+        // 添加按钮2的点击事件处理
+        console.log("按钮2被点击");
+        part3.removeControl(presentTextBlock);
+        presentTextBlock = textBlock2;
+        part3.addControl(presentTextBlock);
+    });   
+    
+    var presentTextBlock = textBlock2;
+    
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
-
+    
+    // 使用布局对齐和填充来调整元素位置
+    part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part2.paddingTopInPixels = 10;
+    
     label.addControl(part2, 1, 0);
+    
+    // 创建第三部分
+    var part3 = new GUI.Rectangle();
+    part3.background = "black"; // 背景颜色
+    part3.width = "310px";
+    part3.height = "420px";
+    part3.cornerRadius = 10;
+    
+    part3.addControl(presentTextBlock);
+    
+    // 使用布局对齐和填充来调整元素位置
+    part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part3.paddingTopInPixels = 10;
+    
+    label.addControl(part3, 2, 0);
 
+    //label创建完成,添加到texture中
     advancedTexture.addControl(label);
 
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     rmLabelBuild.push(label);
     models.push(mesh);
-}
-
-function createLabel1()
-{
-
-    // 创建主要的长方形面板
-    var panel = new GUI.StackPanel();
-    panel.width = "400px"; // 设置宽度
-    panel.height = "700px"; // 设置高度
-    advancedTexture.addControl(panel);
-
-    panel.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    panel.paddingLeftInPixels = 50;
-
-    panel.background = 'rgba(128, 128, 128, 0.5)';
-
-    // 第一部分：文本块，占长方形高度的15%
-    var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = "控制柜";
-    textBlock1.height = "105px";
-    panel.addControl(textBlock1);
-
-    // 第二部分：两个按钮，同一水平线，占长方形高度的15%
-    var button1 = new GUI.Button("button1", "按钮1");
-    button1.width = "40%";
-    button1.height = "5%";
-    button1.background = 'rgba(128, 128, 128, 1)';
-    button1.paddingTopInPixels = 280;
-    button1.paddingLeftInPixels = 0;
-    button1.onPointerUpObservable.add(function() {
-        console.log(1);
-    });
-    panel.addControl(button1);
-
-    var button2 = new GUI.Button("button2", "按钮2");
-    button2.width = "40%";
-    button2.height = "5%";    
-    button2.background = 'rgba(128, 64, 128, 1)';
-    button2.paddingTopInPixels = 180;
-    button2.paddingRightInPixels = 0;
-    button2.onPointerUpObservable.add(function() {
-        console.log(2);
-    });
-    panel.addControl(button2);
-
-    // 第三部分：文本显示，占长方形高度的70%
-    var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = "第三部分";
-    textBlock2.height = "70%";
-    panel.addControl(textBlock2);
 }
 
 
