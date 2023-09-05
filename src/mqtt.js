@@ -1,8 +1,9 @@
 // 引入库
 import mqtt from 'mqtt';
+import config from './config.js'
 
 // 连接 MQTT 代理服务器
-const client = mqtt.connect('mqtt://test.mosquitto.org');
+const client = mqtt.connect(config.mqtt.url);
 
 // 连接成功的回调函数
 client.on('connect', () => {

@@ -1,16 +1,17 @@
 import ftp from 'ftp';
 import fs from 'fs';
+import config from './config.js';
 
 // 创建一个新的 FTP 客户端实例
 const client = new ftp();
 
 // 连接到本地的 FTP 服务器
 client.connect({
-    host: '192.168.0.174',
-    port: 21,
-    user: '15968',
-    password: 'yukuai000',
-    compress:false
+    host: config.ftp.host,
+    port: config.ftp.port,
+    user: config.ftp.user,
+    password: config.ftp.password,
+    compress: config.ftp.compress
 });
 
 // 处理 FTP 连接成功事件
