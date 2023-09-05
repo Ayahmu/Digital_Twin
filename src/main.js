@@ -9,8 +9,7 @@ import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-console.log(window.innerWidth);
-console.log(window.innerHeight);
+
 //将canvas添加到body中
 document.body.appendChild(canvas);
 
@@ -99,30 +98,134 @@ advancedTexture.renderScale = 1;
 let rmLabelBuild = [];
 
 function createLabel(mesh, labelName) {
-    var label = new GUI.Rectangle("label for " + labelName);
+    var label = new GUI.Grid();
+    label.addRowDefinition(12);  // 第一部分占百分之十五
+    label.addRowDefinition(15);  // 第三部分占百分之七十
+    label.addRowDefinition(72);  // 第二部分占百分之十五
     label.background = "rgba(0, 0, 0, 1)";
     label.top = "0%";
     label.left = "-39.5%";
-    label.height = "100%";
+    label.height = "80%";
     label.alpha = 0.6;
     label.width = "20%";
-    label.cornerRadius = 20;
+    label.cornerRadius = 40;
     label.thickness = 1;
     label.linkOffsetY = -100;
+    label.isPointerBlocker = false; // 允许鼠标事件穿透
+    label.paddingRightInPixels = 50;
+
+    // 创建第三行的按钮1
+    var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
+    button1.background = "black";
+    button1.color = "white";
+    button1.isPointerBlocker = true;
+    button1.cornerRadius = 10;
+    button1.onPointerClickObservable.add(function() {
+        // 添加按钮1的点击事件处理
+        console.log("按钮1被点击");
+    });
+
+    // 创建第三行的按钮2
+    var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
+    button2.background = "black";
+    button2.color = "white";
+    button2.isPointerBlocker = true;
+    button2.cornerRadius = 10;
+    button2.onPointerClickObservable.add(function() {
+        // 添加按钮2的点击事件处理
+        console.log("按钮2被点击");
+    });
+
+    // 创建第一部分
+  
+    var panel = new GUI.Rectangle();
+    panel.background = "black"; // 背景颜色
+    panel.width = "160px";
+    panel.height = "60px";
+    panel.cornerRadius = 10;
+
+    var part1 = new GUI.TextBlock();
+    part1.width = "100px";
+    part1.height = "20px";
+    part1.text = "控制柜";
+    part1.color = "white";
+    panel.addControl(part1);
+    label.addControl(panel, 0, 0);
+
+    // 创建第三部分
+    var part3 = new GUI.TextBlock();
+    part3.text = labelName + "\n" + "\n" + "111";
+    part3.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    part3.background = "red";
+    label.addControl(part3, 2, 0);
+
+    // 创建第二部分，分为两列
+    var part2 = new GUI.Grid();
+    part2.addColumnDefinition(50);  // 第一列占百分之五十
+    part2.addColumnDefinition(50);  // 第二列占百分之五十
+
+    part2.addControl(button1, 0, 0);
+    part2.addControl(button2, 0, 1);
+
+    label.addControl(part2, 1, 0);
+
     advancedTexture.addControl(label);
-    //label.linkWithMesh(mesh);
-    var text1 = new GUI.TextBlock();
-    text1.text = labelName;
-    text1.color = "white";
-    text1.position = new BABYLON.Vector2(0,0);
-    label.addControl(text1);
-    var button = new GUI.Button();
-    label.addControl(button);
+
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     rmLabelBuild.push(label);
-    rmLabelBuild.push(text1);
     models.push(mesh);
 }
+
+function createLabel1()
+{
+
+    // 创建主要的长方形面板
+    var panel = new GUI.StackPanel();
+    panel.width = "400px"; // 设置宽度
+    panel.height = "700px"; // 设置高度
+    advancedTexture.addControl(panel);
+
+    panel.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    panel.paddingLeftInPixels = 50;
+
+    panel.background = 'rgba(128, 128, 128, 0.5)';
+
+    // 第一部分：文本块，占长方形高度的15%
+    var textBlock1 = new GUI.TextBlock();
+    textBlock1.text = "控制柜";
+    textBlock1.height = "105px";
+    panel.addControl(textBlock1);
+
+    // 第二部分：两个按钮，同一水平线，占长方形高度的15%
+    var button1 = new GUI.Button("button1", "按钮1");
+    button1.width = "40%";
+    button1.height = "5%";
+    button1.background = 'rgba(128, 128, 128, 1)';
+    button1.paddingTopInPixels = 280;
+    button1.paddingLeftInPixels = 0;
+    button1.onPointerUpObservable.add(function() {
+        console.log(1);
+    });
+    panel.addControl(button1);
+
+    var button2 = new GUI.Button("button2", "按钮2");
+    button2.width = "40%";
+    button2.height = "5%";    
+    button2.background = 'rgba(128, 64, 128, 1)';
+    button2.paddingTopInPixels = 180;
+    button2.paddingRightInPixels = 0;
+    button2.onPointerUpObservable.add(function() {
+        console.log(2);
+    });
+    panel.addControl(button2);
+
+    // 第三部分：文本显示，占长方形高度的70%
+    var textBlock2 = new GUI.TextBlock();
+    textBlock2.text = "第三部分";
+    textBlock2.height = "70%";
+    panel.addControl(textBlock2);
+}
+
 
 function removeLabel(arr) {
     //清除面板
