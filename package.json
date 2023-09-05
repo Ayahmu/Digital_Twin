@@ -16,6 +16,8 @@
     "@babylonjs/gui": "^6.17.0",
     "babylonjs": "^6.18.0",
     "babylonjs-gui": "^6.17.0",
-    "babylonjs-loaders": "^6.17.0"
+    "babylonjs-loaders": "^6.17.0",
+    "ftp": "^0.3.10",
+    "mqtt": "^5.0.4"
   }
 }

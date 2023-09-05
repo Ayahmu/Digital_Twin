@@ -1,4 +1,4 @@
-import './style.css'
+import './style.css';
 //导入babylonjs
 import * as BABYLON from "babylonjs";
 //导入gltf加载器
