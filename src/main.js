@@ -49,6 +49,7 @@ const targetID = "A310001"; // 例如，查找 ID 为 "A317001" 的对象
 
 // 使用哈希表查找特定 ID 对应的数组索引
 const targetIndex = idToIndexMap[targetID];
+
 console.log("A310001", objectArray[targetIndex]);
 
 
