@@ -36,6 +36,20 @@ objectArray = data.map(jsonObject => new MyObject(
     )); 
 // 打印封装后的对象数组
 console.log('对象数组：', objectArray);
+// 创建一个哈希表，将 ID 映射到数组索引
+const idToIndexMap = {};
+
+// 填充哈希表
+objectArray.forEach((obj, index) => {
+  idToIndexMap[obj.ID] = index;
+});
+
+// 要查找的特定 ID
+const targetID = "A310001"; // 例如，查找 ID 为 "A317001" 的对象
+
+// 使用哈希表查找特定 ID 对应的数组索引
+const targetIndex = idToIndexMap[targetID];
+console.log("A310001", objectArray[targetIndex]);
 
 
 
@@ -202,9 +216,7 @@ function createLabel(mesh, labelName) {
     button2.onPointerClickObservable.add(function() {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
-        part3.removeControl(presentTextBlock);
-        presentTextBlock = textBlock2;
-        part3.addControl(presentTextBlock);
+        window.open("https://ys.mihoyo.com/");
     });   
     
     var presentTextBlock = textBlock2;
