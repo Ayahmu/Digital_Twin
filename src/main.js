@@ -141,8 +141,8 @@ function createLabel(mesh, labelName) {
 
     //第0部分
     var part0 = GUI.Button.CreateSimpleButton("button1", " X");
-    part0.width = "20px";
-    part0.height = "20px";
+    part0.width = "18px";
+    part0.height = "18px";
     part0.background = "black";
     part0.color = "white";
     part0.isPointerBlocker = true;
@@ -220,7 +220,7 @@ function createLabel(mesh, labelName) {
         window.open("https://ys.mihoyo.com/");
     });   
     
-    var presentTextBlock = textBlock2;
+    presentTextBlock = textBlock2;
     
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
