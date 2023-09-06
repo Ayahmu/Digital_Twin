@@ -58,7 +58,6 @@ console.log("A310001", objectArray[targetIndex]);
 //创建引擎，第二个参数为抗锯齿
 const engine = new BABYLON.Engine(canvas,true,{stencil:true});
 
-
 //创建场景
 const scene = new BABYLON.Scene(engine,false);
 
@@ -143,25 +142,25 @@ function createLabel(mesh, labelName) {
     textBlock2.color = "blue";
 
     //第0部分
-    var button0 = GUI.Button.CreateSimpleButton("button1", " X");
-    button0.width = "20px";
-    button0.height = "20px";
-    button0.background = "black";
-    button0.color = "white";
-    button0.isPointerBlocker = true;
-    button0.cornerRadius = 4;
-    button0.textBlock.fontSize = 12;
-    button0.textBlock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    button0.textBlock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    button0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    button0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-    button0.onPointerClickObservable.add(function() {
+    var part0 = GUI.Button.CreateSimpleButton("button1", " X");
+    part0.width = "20px";
+    part0.height = "20px";
+    part0.background = "black";
+    part0.color = "white";
+    part0.isPointerBlocker = true;
+    part0.cornerRadius = 4;
+    part0.textBlock.fontSize = 12;
+    part0.textBlock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    part0.textBlock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    part0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    part0.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("按钮1被点击"); 
         label.isVisible = false;
     });
    
-    label.addControl(button0, 0, 0);
+    label.addControl(part0, 0, 0);
 
     // 创建第一部分
     var part1 = new GUI.Rectangle();
