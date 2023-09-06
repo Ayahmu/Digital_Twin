@@ -101,9 +101,10 @@ let rmLabelBuild = [];
 
 function createLabel(mesh, labelName) {
     var label = new GUI.Grid();
-    label.addRowDefinition(12);  // 第一部分占百分之十五
+    label.addRowDefinition(4);
+    label.addRowDefinition(10);  // 第一部分占百分之十五
     label.addRowDefinition(12);  // 第三部分占百分之七十
-    label.addRowDefinition(76);  // 第二部分占百分之十五
+    label.addRowDefinition(74);  // 第二部分占百分之十五
     label.background = "rgba(0, 0, 0, 0.6)";
     label.height = "600px";
     label.width = "380px";
@@ -125,14 +126,27 @@ function createLabel(mesh, labelName) {
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
-    var iframe = document.createElement("iframe");
-    iframe.id = "pdfIframe";
-    iframe.src = "data:text/html;charset=utf-8,<html><body><h1>Hello, World!</h1></body></html>";
-    iframe.style.width = "800px";
-    iframe.style.height = "600px";
-    document.body.appendChild(iframe);
-
+    //第0部分
+    var button0 = GUI.Button.CreateSimpleButton("button1", " X");
+    button0.width = "20px";
+    button0.height = "20px";
+    button0.background = "black";
+    button0.color = "white";
+    button0.isPointerBlocker = true;
+    button0.cornerRadius = 4;
+    button0.textBlock.fontSize = 12;
+    button0.textBlock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    button0.textBlock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    button0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    button0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    button0.onPointerClickObservable.add(function() {
+        // 添加按钮1的点击事件处理
+        console.log("按钮1被点击"); 
+        label.isVisible = false;
+    });
    
+    label.addControl(button0, 0, 0);
+
     // 创建第一部分
     var part1 = new GUI.Rectangle();
     part1.background = "black"; // 背景颜色
@@ -153,7 +167,7 @@ function createLabel(mesh, labelName) {
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part1.paddingTopInPixels = 10;
     
-    label.addControl(part1, 0, 0);
+    label.addControl(part1, 1, 0);
     
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
@@ -173,9 +187,9 @@ function createLabel(mesh, labelName) {
     button1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("按钮1被点击"); 
-        var iframe = document.getElementById("pdfIframe");
-        console.log(iframe);
-        iframe.src = "pdf/pdf_test.pdf";
+        part3.removeControl(presentTextBlock);
+        presentTextBlock = textBlock1;
+        part3.addControl(presentTextBlock);
     });
     var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
     button2.width = "120px";
@@ -195,7 +209,7 @@ function createLabel(mesh, labelName) {
         part3.addControl(presentTextBlock);
     });   
     
-    var presentTextBlock = textBlock2;
+    presentTextBlock = textBlock2;
     
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
@@ -204,7 +218,7 @@ function createLabel(mesh, labelName) {
     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part2.paddingTopInPixels = 10;
     
-    label.addControl(part2, 1, 0);
+    label.addControl(part2, 2, 0);
     
     // 创建第三部分
     var part3 = new GUI.Rectangle();
@@ -219,7 +233,7 @@ function createLabel(mesh, labelName) {
     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part3.paddingTopInPixels = 10;
     
-    label.addControl(part3, 2, 0);
+    label.addControl(part3, 3, 0);
 
     //label创建完成,添加到texture中
     advancedTexture.addControl(label);
@@ -228,7 +242,6 @@ function createLabel(mesh, labelName) {
     rmLabelBuild.push(label);
     models.push(mesh);
 }
-
 
 function removeLabel(arr) {
     //清除面板
