@@ -123,7 +123,28 @@ function createLabel(mesh, labelName) {
     textBlock2.text = labelName + "\n" + "\n" + "111";
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
-    
+
+    //第0部分
+    var part0 = GUI.Button.CreateSimpleButton("button1", " X");
+    part0.width = "20px";
+    part0.height = "20px";
+    part0.background = "black";
+    part0.color = "white";
+    part0.isPointerBlocker = true;
+    part0.cornerRadius = 4;
+    part0.textBlock.fontSize = 12;
+    part0.textBlock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    part0.textBlock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    part0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    part0.onPointerClickObservable.add(function() {
+        // 添加按钮1的点击事件处理
+        console.log("按钮1被点击"); 
+        label.isVisible = false;
+    });
+   
+    label.addControl(part0, 0, 0);
+
     // 创建第一部分
     var part1 = new GUI.Rectangle();
     part1.background = "black"; // 背景颜色
