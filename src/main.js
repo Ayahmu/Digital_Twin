@@ -114,6 +114,7 @@ function createLabel(mesh, labelName) {
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
     
+    //按钮展示部分
     var textBlock1 = new GUI.TextBlock();
     textBlock1.text = labelName + "\n" + "\n" + "111";
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
@@ -123,7 +124,15 @@ function createLabel(mesh, labelName) {
     textBlock2.text = labelName + "\n" + "\n" + "111";
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
-    
+
+    var iframe = document.createElement("iframe");
+    iframe.id = "pdfIframe";
+    iframe.src = "data:text/html;charset=utf-8,<html><body><h1>Hello, World!</h1></body></html>";
+    iframe.style.width = "800px";
+    iframe.style.height = "600px";
+    document.body.appendChild(iframe);
+
+   
     // 创建第一部分
     var part1 = new GUI.Rectangle();
     part1.background = "black"; // 背景颜色
@@ -163,10 +172,10 @@ function createLabel(mesh, labelName) {
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
-        part3.removeControl(presentTextBlock);
-        presentTextBlock = textBlock1;
-        part3.addControl(presentTextBlock);
+        console.log("按钮1被点击"); 
+        var iframe = document.getElementById("pdfIframe");
+        console.log(iframe);
+        iframe.src = "pdf/pdf_test.pdf";
     });
     var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
     button2.width = "120px";
