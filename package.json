@@ -18,11 +18,15 @@
     "babylonjs-gui": "^6.17.0",
     "babylonjs-loaders": "^6.17.0",
     "ftp": "^0.3.10",
+<<<<<<< HEAD
     "mqtt": "^5.0.4",
 <<<<<<< HEAD
 =======
     "fs": "^0.0.1-security",
 >>>>>>> master
     "pdfjs-dist": "^3.10.111"
+=======
+    "mqtt": "^5.0.4"
+>>>>>>> parent of ea07cdd (change)
   }
 }
