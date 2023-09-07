@@ -37,6 +37,21 @@ objectArray = data.map(jsonObject => new MyObject(
     )); 
 // 打印封装后的对象数组
 console.log('对象数组：', objectArray);
+// 创建一个哈希表，将 ID 映射到数组索引
+const idToIndexMap = {};
+
+// 填充哈希表
+objectArray.forEach((obj, index) => {
+  idToIndexMap[obj.ID] = index;
+});
+
+// 要查找的特定 ID
+const targetID = "A310001"; // 例如，查找 ID 为 "A317001" 的对象
+
+// 使用哈希表查找特定 ID 对应的数组索引
+const targetIndex = idToIndexMap[targetID];
+
+console.log("A310001", objectArray[targetIndex]);
 
 
 
@@ -124,7 +139,28 @@ function createLabel(mesh, labelName) {
     textBlock2.text = labelName + "\n" + "\n" + "111";
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
-    
+
+    //第0部分
+    var part0 = GUI.Button.CreateSimpleButton("button1", " X");
+    part0.width = "18px";
+    part0.height = "18px";
+    part0.background = "black";
+    part0.color = "white";
+    part0.isPointerBlocker = true;
+    part0.cornerRadius = 4;
+    part0.textBlock.fontSize = 12;
+    part0.textBlock.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    part0.textBlock.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    part0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    part0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    part0.onPointerClickObservable.add(function() {
+        // 添加按钮1的点击事件处理
+        console.log("按钮1被点击"); 
+        label.isVisible = false;
+    });
+   
+    label.addControl(part0, 0, 0);
+
     // 创建第一部分
     var part1 = new GUI.Rectangle();
     part1.background = "black"; // 背景颜色
@@ -192,12 +228,10 @@ function createLabel(mesh, labelName) {
     button2.onPointerClickObservable.add(function() {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
-        part3.removeControl(presentTextBlock);
-        presentTextBlock = textBlock2;
-        part3.addControl(presentTextBlock);
+        window.open("https://ys.mihoyo.com/");
     });   
     
-    var presentTextBlock = textBlock2;
+    presentTextBlock = textBlock2;
     
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
