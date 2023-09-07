@@ -5,6 +5,7 @@ import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
 import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
+
 //创建canvas
 const canvas = document.createElement("canvas");
 canvas.width = window.innerWidth;
@@ -164,6 +165,16 @@ function createLabel(mesh, labelName) {
     button1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("按钮1被点击");
+        fetch('http://192.168.0.174:8003/api/data',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({data: 'Hello,server!'}),
+            mode: 'no-cors'
+        }).then((responseData) => {   // 处理解析后的数据
+            console.log(responseData);   // 将响应数据输出到控制台
+        })
         part3.removeControl(presentTextBlock);
         presentTextBlock = textBlock1;
         part3.addControl(presentTextBlock);
