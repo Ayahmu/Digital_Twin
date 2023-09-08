@@ -11,5 +11,11 @@ ftp_config = {
 }
 
 mqtt_config = {
-    'url': 'mqtt://test.mosquitto.org'
+    'url': 'broker.emqx.io',
+    'topic': 'test/topic'
+}
+
+backend_config = {
+    'host': '192.168.0.174',
+    'port': '8003'
 }

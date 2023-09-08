@@ -155,7 +155,7 @@ function createLabel(mesh, labelName) {
     part0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
     part0.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
-        console.log("按钮1被点击"); 
+        console.log("关闭");
         label.isVisible = false;
     });
    
@@ -325,7 +325,6 @@ BABYLON.SceneLoader.ImportMesh(
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
-        console.log(importedMesh)
         importedMesh.getChildren().forEach(function (mesh){
             if(mesh.name === "Mesh.004"){
                 hydrogenProductionModule = mesh;
