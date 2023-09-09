@@ -4,7 +4,7 @@ import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
-import data from '../public/json/HydrogenSysInfo.json' assert{type:'JSON'}
+import data from '../public/json/HydrogenSysInfo.json' assert {type: 'JSON'}
 
 //创建canvas
 const canvas = document.createElement("canvas");
@@ -34,7 +34,7 @@ objectArray = data.map(jsonObject => new MyObject(
       jsonObject.Manual,
       jsonObject.Url,
       jsonObject.LocID
-    )); 
+    ));
 // 打印封装后的对象数组
 console.log('对象数组：', objectArray);
 // 创建一个哈希表，将 ID 映射到数组索引
@@ -46,12 +46,12 @@ objectArray.forEach((obj, index) => {
 });
 
 // 要查找的特定 ID
-const targetID = "A310001"; // 例如，查找 ID 为 "A317001" 的对象
+const targetID = "10QM001"; // 例如，查找 ID 为 "10QM001" 的对象
 
 // 使用哈希表查找特定 ID 对应的数组索引
-const targetIndex = idToIndexMap[targetID];
+let targetIndex = idToIndexMap[targetID];
 
-console.log("A310001", objectArray[targetIndex]);
+console.log("10QM001", objectArray[targetIndex]);
 
 
 
@@ -68,10 +68,10 @@ const camera = new BABYLON.ArcRotateCamera(
     0,//相机水平旋转角度
     0,//相机垂直旋转角度
     10,//相机旋转半径
-    new BABYLON.Vector3(85,30,275),//相机目标点
+    new BABYLON.Vector3(35,20,65),//相机目标点
     scene//相机所在场景
 );
-camera.position = new BABYLON.Vector3(90,70,100);
+camera.position = new BABYLON.Vector3(35,30,-20);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -96,9 +96,6 @@ actionManager.registerAction(
         BABYLON.ActionManager.OnPickTrigger,//鼠标点击触发
         function (event){
             switch (event.meshUnderPointer.id){
-                case "Mesh.004":
-                case "Mesh.005":
-                case "Mesh.020":
                 default:
                     removeLabel(rmLabelBuild);
                     createLabel(event.meshUnderPointer,event.meshUnderPointer.id);
@@ -131,12 +128,12 @@ function createLabel(mesh, labelName) {
     label.paddingLeftInPixels = 15;
     
     var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = labelName + "\n" + "\n" + "111";
+    textBlock1.text = getJsonName(labelName);
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock1.color = "white";
     
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = labelName + "\n" + "\n" + "111";
+    textBlock2.text = getJsonName(labelName);
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -156,7 +153,9 @@ function createLabel(mesh, labelName) {
     part0.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("关闭");
-        label.isVisible = false;
+        //使用removeLabel可以同时移除高光
+        removeLabel(rmLabelBuild);
+        //label.isVisible = false;
     });
    
     label.addControl(part0, 0, 0);
@@ -284,6 +283,17 @@ function removeLabel(arr) {
     rmLabelBuild = [];
 }
 
+//根据ID显示设备名称
+function getJsonName(labelName){
+    let targetObject = objectArray.find(obj => obj.ID === labelName);
+
+    if(targetObject){
+        return targetObject.Name
+    }else {
+        return null
+    }
+}
+
 function moveCameraPosition(targetPosition){
     var ease = new BABYLON.CubicEase();
     ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEIN);
@@ -326,7 +336,7 @@ function moveCameraTarget(targetPosition){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "Draco.glb",
+    "model.gltf",
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
@@ -356,25 +366,16 @@ scene.onPointerObservable.add((pointerInfo) => {
     switch (pointerInfo.type) {
         case BABYLON.PointerEventTypes.POINTERDOWN:
         case BABYLON.PointerEventTypes.POINTERWHEEL:
-            hydrogenProductionModule.actionManager = null;
-            purificationModule.actionManager = null;
-            airControlModule.actionManager = null;
             childMesh.forEach(function (mesh){
                 mesh.actionManager = null;
             })
             break;
         case BABYLON.PointerEventTypes.POINTERUP:
-            hydrogenProductionModule.actionManager = actionManager;
-            purificationModule.actionManager = actionManager;
-            airControlModule.actionManager = actionManager;
             childMesh.forEach(function (mesh){
                 mesh.actionManager = actionManager;
             })
             break;
         case BABYLON.PointerEventTypes.POINTERPICK:
-            hydrogenProductionModule.actionManager = actionManager;
-            purificationModule.actionManager = actionManager;
-            airControlModule.actionManager = actionManager;
             childMesh.forEach(function (mesh){
                 mesh.actionManager = actionManager;
             })
@@ -382,12 +383,30 @@ scene.onPointerObservable.add((pointerInfo) => {
     }
 });
 
-const light = new BABYLON.DirectionalLight(
+const light1 = new BABYLON.DirectionalLight(
     "light",
-    new BABYLON.Vector3(1,-1,0),//光源方向
+    new BABYLON.Vector3(1,-1,1),//光源方向
     scene
 );
-light.intensity = 10;
+light1.intensity = 1;
+const light2 = new BABYLON.DirectionalLight(
+    "light",
+    new BABYLON.Vector3(-1,-1,1),//光源方向
+    scene
+);
+light2.intensity = 1;
+const light3 = new BABYLON.DirectionalLight(
+    "light",
+    new BABYLON.Vector3(-1,-1,-1),//光源方向
+    scene
+);
+light3.intensity = 1;
+const light4 = new BABYLON.DirectionalLight(
+    "light",
+    new BABYLON.Vector3(1,-1,-1),//光源方向
+    scene
+);
+light4.intensity = 1;
 
 
 scene.registerBeforeRender(function(){
