@@ -270,6 +270,24 @@ function createLabel(mesh, labelName) {
     models.push(mesh);
 }
 
+function createLabel1(mesh, labelName)
+{
+
+}
+
+function createLabel2(mesh, labelName)
+{
+
+}
+
+function createLabel3(mesh, labelName)
+{
+    
+}
+
+function createLabels(id){
+
+}
 
 function removeLabel(arr) {
     //清除面板
