@@ -204,13 +204,18 @@ function createLabel(mesh, labelName) {
         fetch('http://192.168.0.174:8003/api/data',{
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({data: 'Hello,server!'}),
-            mode: 'no-cors'
-        }).then((responseData) => {   // 处理解析后的数据
-            console.log(responseData);   // 将响应数据输出到控制台
         })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
         part3.removeControl(presentTextBlock);
         presentTextBlock = textBlock1;
         part3.addControl(presentTextBlock);

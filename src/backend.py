@@ -1,17 +1,30 @@
+import requests
 from flask import Flask, jsonify, request
 from ftplib import FTP
 from config import ftp_config, mqtt_config, backend_config
+from flask_cors import CORS, cross_origin
 
 import paho.mqtt.client as mqtt
 import os
 
 app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
 
 
 @app.route('/api/data', methods=['POST'])
+@cross_origin(origin='http://localhost:5173', supports_credentials=True)
 def get_data():
+    data = request.get_json()
+    print(f'Request received: {data}')  # 检查是否收到请求
 
-    return
+    if data is not None:
+        message = data.get('data')
+        print(f'Message: {message}')  # 检查是否正确解析数据
+        # 在这里处理接受到的消息，可以进行任何需要的操作
+
+    response = jsonify({'acknowledged': True})
+
+    return response
 
 
 def setup_ftp():  # 连接ftp服务器并下载json文件
@@ -66,6 +79,7 @@ setup_mqtt()
 
 
 if __name__ == '__main__':
-    app.run(host=backend_config['host'], port=backend_config['port'], debug=False)
-
+    # app.run(port=backend_config['port'])
+    # app.run(host='0.0.0.0', port=backend_config['port'], debug=True)
+    app.run(host='192.168.0.174', port='8003', debug=True)
 
