@@ -132,14 +132,9 @@ function createLabelDefault(mesh, labelName) {
     label.isPointerBlocker = false; // 允许鼠标事件穿透
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
-    
-    var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = getJsonName(labelName);
-    textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    textBlock1.color = "white";
-    
+
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJsonName(labelName);
+    textBlock2.text = getJson(labelName,'Name');
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -205,25 +200,25 @@ function createLabelDefault(mesh, labelName) {
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
+        let Manual = getJson(labelName,'Manual');
+
         fetch('http://192.168.0.174:8003/api/data',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({data: 'Hello,server!'}),
+            body: JSON.stringify({Manual: Manual}),
         })
         .then(response => response.json())
         .then(data => {
             console.log(data);
+            //打开pdf文件
+            window.open(data.path, "_blank")
         })
         .catch(err => {
             console.log(err);
         });
 
-        part3.removeControl(presentTextBlock);
-        presentTextBlock = textBlock1;
-        part3.addControl(presentTextBlock);
     });
     var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
     button2.width = "120px";
@@ -958,12 +953,16 @@ function removeLabel(arr) {
 }
 
 //根据ID显示设备名称
-function getJsonName(labelName){
-    let targetIndex = idToIndexMap[labelName];
-    let targetObject = objectArray[targetIndex];
+function getJson(labelName,property){
+    let targetObject = objectArray[idToIndexMap[labelName]]
 
     if(targetObject){
-        return  "名称：" + targetObject.Name +"\n"+ "信息：" + targetObject.Info
+        if(property === 'Name'){
+            return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
+        }else if(property === 'Manual'){
+            return targetObject.Manual;
+        }
+
     }else {
         var str = "暂无设备信息"
         return str
@@ -1060,30 +1059,36 @@ scene.onPointerObservable.add((pointerInfo) => {
     }
 });
 
+const lightColor = new BABYLON.Color3(0.6,0.6,0.5)
+
 const light1 = new BABYLON.DirectionalLight(
     "light",
     new BABYLON.Vector3(1,-1,1),//光源方向
     scene
 );
 light1.intensity = 1;
+light1.diffuse = lightColor;
 const light2 = new BABYLON.DirectionalLight(
     "light",
     new BABYLON.Vector3(-1,-1,1),//光源方向
     scene
 );
 light2.intensity = 1;
+light2.diffuse = lightColor;
 const light3 = new BABYLON.DirectionalLight(
     "light",
     new BABYLON.Vector3(-1,-1,-1),//光源方向
     scene
 );
 light3.intensity = 1;
+light3.diffuse = lightColor;
 const light4 = new BABYLON.DirectionalLight(
     "light",
     new BABYLON.Vector3(1,-1,-1),//光源方向
     scene
 );
 light4.intensity = 1;
+light4.diffuse = lightColor;
 
 
 scene.registerBeforeRender(function(){
