@@ -68,10 +68,10 @@ const camera = new BABYLON.ArcRotateCamera(
     0,//相机水平旋转角度
     0,//相机垂直旋转角度
     10,//相机旋转半径
-    new BABYLON.Vector3(35,20,65),//相机目标点
+    new BABYLON.Vector3(0,20,80),//相机目标点
     scene//相机所在场景
 );
-camera.position = new BABYLON.Vector3(35,30,-20);
+camera.position = new BABYLON.Vector3(0,30,0);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -420,7 +420,7 @@ scene.registerBeforeRender(function(){
 //渲染场景
 engine.runRenderLoop(() => {
     scene.render();
-    //console.log(camera.position);
+    console.log(camera.position);
 })
 
 //监听窗口大小改变
