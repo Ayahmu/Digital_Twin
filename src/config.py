@@ -12,6 +12,7 @@ ftp_config = {
 
 mqtt_config = {
     'url': 'broker.emqx.io',
+    'port': 1883,
     'topic': 'test/topic'
 }
 

@@ -276,28 +276,9 @@ function createLabelDefault(mesh, labelName) {
     button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
-        // 添加按钮1的点击事件处理
-        let Manual = getJson(labelName,'Manual');
-
-        fetch('http://192.168.0.174:8003/api/data',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({Manual: Manual}),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            //打开pdf文件
-            if(data.status === '成功')
-                window.open(data.path, "_blank");
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
+        getPDF(labelName);
     });
+
     var button2 = GUI.Button.CreateSimpleButton("button2", "相关资料");
     button2.width = "120px";
     button2.height = "50px";
@@ -366,12 +347,12 @@ function createLabel2(mesh, labelName) {
     let idx = idToDoor[labelName];
     
     var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = getJsonName(labelName);
+    textBlock1.text = getJsonName(labelName,'Name');
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock1.color = "white";
     
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJsonName(labelName);
+    textBlock2.text = getJsonName(labelName,'Name');
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -436,23 +417,7 @@ function createLabel2(mesh, labelName) {
     button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
-        // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
-        fetch('http://192.168.0.174:8003/api/data',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({data: 'Hello,server!'}),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
+        getPDF(labelName);
         part4.removeControl(presentTextBlock);
         presentTextBlock = textBlock1;
         part4.addControl(presentTextBlock);
@@ -504,7 +469,7 @@ function createLabel2(mesh, labelName) {
     part3_b1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("按钮1被点击");
-        if(doorAngle[idx] == 1) return;
+        if(doorAngle[idx] === 1) return;
         var rotationAxis = new BABYLON.Vector3(0, 1, 0);
         var rotationAngle =  -Math.PI / 3;
         mesh.rotate(rotationAxis, rotationAngle, BABYLON.Space.LOCAL);
@@ -524,7 +489,7 @@ function createLabel2(mesh, labelName) {
     part3_b2.onPointerClickObservable.add(function() {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
-        if(doorAngle[idx] == 0) return;
+        if(doorAngle[idx] === 0) return;
         var rotationAxis = new BABYLON.Vector3(0, 1, 0);
         var rotationAngle =  Math.PI / 3;
         mesh.rotate(rotationAxis, rotationAngle, BABYLON.Space.LOCAL);
@@ -658,23 +623,7 @@ function createLabel3(mesh, labelName) {
     button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
-        // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
-        fetch('http://192.168.0.174:8003/api/data',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({data: 'Hello,server!'}),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
+        getPDF(labelName);
         part4.removeControl(presentTextBlock);
         presentTextBlock = textBlock1;
         part4.addControl(presentTextBlock);
@@ -872,23 +821,7 @@ function createLabel4(mesh, labelName) {
     button1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     button1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     button1.onPointerClickObservable.add(function() {
-        // 添加按钮1的点击事件处理
-        console.log("按钮1被点击");
-        fetch('http://192.168.0.174:8003/api/data',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({data: 'Hello,server!'}),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
+        getPDF(labelName);
         part4.removeControl(presentTextBlock);
         presentTextBlock = textBlock1;
         part4.addControl(presentTextBlock);
@@ -1048,8 +981,7 @@ function getJsonName(labelName){
         return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
     }else 
     {
-        var str = "暂无设备信息"
-        return str
+        return "暂无设备信息"
 
     }
 }
@@ -1065,8 +997,7 @@ function getJson(labelName,property){
         }
 
     }else {
-        var str = "暂无设备信息"
-        return str
+        return "暂无设备信息"
 
     }
 }
@@ -1136,7 +1067,47 @@ BABYLON.SceneLoader.ImportMesh(
         });
 });
 
+function getPDF(labelName){
+    let Manual = getJson(labelName,'Manual');
 
+    fetch('http://192.168.0.174:8003/api/data',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({Manual: Manual}),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            //打开pdf文件
+            if(data.status === '成功'){
+                window.open(data.path, "_blank");
+                console.log("ftp下载文件成功。")
+            }
+            else if(data.status === '本地文件'){
+                window.open(data.path, "_blank");
+                console.log("已使用本地文件！");
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+
+function fetchIsWarning(){
+    fetch('http://192.168.0.174:8003/api/warning',{
+        method: 'POST'
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+setInterval(fetchIsWarning,5000);
 
 //鼠标按下时取消绑定事件,防止卡顿
 scene.onPointerObservable.add((pointerInfo) => {
