@@ -207,7 +207,8 @@ function createLabel(mesh, labelName) {
         .then(data => {
             console.log(data);
             //打开pdf文件
-            window.open(data.path, "_blank")
+            if(data.status === '成功')
+                window.open(data.path, "_blank");
         })
         .catch(err => {
             console.log(err);
