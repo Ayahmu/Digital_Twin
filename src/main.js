@@ -68,14 +68,15 @@ const camera = new BABYLON.ArcRotateCamera(
     0,                // 相机水平旋转角度
     0,                // 相机垂直旋转角度
     10,               // 相机旋转半径
-    new BABYLON.Vector3(100, 20, 100), // 相机目标点
+    new BABYLON.Vector3(30, 20, 30), // 相机目标点
     scene             // 相机所在场景
 );
 
 // 设置相机的灵敏度
-camera.panningSensibility = 140; // 增加平移灵敏度
+camera.panningSensibility = 120; // 增加平移灵敏度
+camera.wheelPrecision = 50;
 
-camera.position = new BABYLON.Vector3(0, 30, 0);
+camera.position = new BABYLON.Vector3(120, 30, 120);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -172,7 +173,7 @@ function createLabelDefault(mesh, labelName) {
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     
     var textBlock0 = new GUI.TextBlock();
-    textBlock0.text = "控制柜";
+    textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
@@ -330,7 +331,7 @@ function createLabel2(mesh, labelName) {
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     
     var textBlock0 = new GUI.TextBlock();
-    textBlock0.text = "控制柜";
+    textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
@@ -544,7 +545,7 @@ function createLabel3(mesh, labelName) {
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     
     var textBlock0 = new GUI.TextBlock();
-    textBlock0.text = "控制柜";
+    textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
@@ -758,7 +759,7 @@ function createLabel4(mesh, labelName) {
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     
     var textBlock0 = new GUI.TextBlock();
-    textBlock0.text = "控制柜";
+    textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
@@ -953,6 +954,20 @@ function removeLabel(arr) {
 }
 
 //根据ID显示设备名称
+function getJsonName(labelName){
+    let targetObject = objectArray[idToIndexMap[labelName]]
+
+    if(targetObject)
+    {
+        return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
+    }else 
+    {
+        var str = "暂无设备信息"
+        return str
+
+    }
+}
+
 function getJson(labelName,property){
     let targetObject = objectArray[idToIndexMap[labelName]]
 
