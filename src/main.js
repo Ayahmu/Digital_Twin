@@ -15,6 +15,11 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 let objectArray = null;
+let doorAngle = [0,0,0];
+let idToDoor = {};
+idToDoor["Mesh.2971"] = 0;
+idToDoor["Mesh.1898"] = 1;
+idToDoor["Mesh.633"] = 2;
 //读取json数据
 function MyObject(ID, Name, Info, Manual, Url, LocID, Animation) {
     this.ID = ID;
@@ -68,18 +73,89 @@ const camera = new BABYLON.ArcRotateCamera(
     0,                // 相机水平旋转角度
     0,                // 相机垂直旋转角度
     10,               // 相机旋转半径
-    new BABYLON.Vector3(30, 20, 30), // 相机目标点
+    new BABYLON.Vector3(10, 10, 10), // 相机目标点
     scene             // 相机所在场景
 );
 
 // 设置相机的灵敏度
 camera.panningSensibility = 120; // 增加平移灵敏度
-camera.wheelPrecision = 50;
+camera.wheelPrecision = 60;
 
 camera.position = new BABYLON.Vector3(120, 30, 120);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
+
+// 打开柜门
+function openCabinetDoor(mesh) {
+    // 假设柜门的初始旋转角度为0度，打开柜门需要将其旋转到一定角度（例如90度）
+    var targetRotation = BABYLON.Tools.ToRadians(45); // 90度的目标旋转角度
+
+    // 创建动画来逐渐旋转柜门
+    var animation = new BABYLON.Animation(
+        "OpenCabinetDoorAnimation",
+        "_rotation.y", // 以Y轴为旋转轴
+        30, // 帧率
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    // 设置动画的关键帧
+    var keys = [];
+    keys.push({
+        frame: 0,
+        value: mesh.rotation.y // 初始角度
+    });
+    keys.push({
+        frame: 30, // 动画帧数
+        value: Math.PI / 4 // 目标角度
+    });
+
+    animation.setKeys(keys);
+
+    // 添加动画到柜门模型
+    mesh.animations.push(animation);
+    console.log(mesh.animations);
+    console.log(mesh);
+
+    // 启动动画
+    scene.beginAnimation(mesh, 0, 30); // 第三个参数表示不循环动画
+    mesh.animations=[];
+}
+
+// 关闭柜门
+function closeCabinetDoor(mesh) {
+    // 假设柜门的初始旋转角度为90度，关闭柜门需要将其旋转回0度
+    var targetRotation = BABYLON.Tools.ToRadians(0); // 0度的目标旋转角度
+
+    // 创建动画来逐渐旋转柜门
+    var animation = new BABYLON.Animation(
+        "CloseCabinetDoorAnimation",
+        "rotation.y", // 以Y轴为旋转轴
+        30, // 帧率
+        BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+        BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    // 设置动画的关键帧
+    var keys = [];
+    keys.push({
+        frame: 0,
+        value: mesh.rotation.y // 初始角度
+    });
+    keys.push({
+        frame: 30, // 动画帧数
+        value: targetRotation // 目标角度
+    });
+
+    animation.setKeys(keys);
+
+    // 添加动画到柜门模型
+    mesh.animations.push(animation);
+
+    // 启动动画
+    scene.beginAnimation(mesh, 0, 30, false); // 第三个参数表示不循环动画
+}
 
 //创建高亮层
 let highLightLayer = new BABYLON.HighlightLayer('highLightLayer',scene,{camera:camera});
@@ -286,6 +362,7 @@ function createLabel2(mesh, labelName) {
     label.isPointerBlocker = false; // 允许鼠标事件穿透
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
+    let idx = idToDoor[labelName];
     
     var textBlock1 = new GUI.TextBlock();
     textBlock1.text = getJsonName(labelName);
@@ -426,8 +503,11 @@ function createLabel2(mesh, labelName) {
     part3_b1.onPointerClickObservable.add(function() {
         // 添加按钮1的点击事件处理
         console.log("按钮1被点击");
-        // 指定旋转轴的位置
-
+        if(doorAngle[idx] == 1) return;
+        var rotationAxis = new BABYLON.Vector3(0, 1, 0);
+        var rotationAngle =  -Math.PI / 3;
+        mesh.rotate(rotationAxis, rotationAngle, BABYLON.Space.LOCAL);
+        doorAngle[idx] = 1;
     });
 
     var part3_b2 = GUI.Button.CreateSimpleButton("button2", "关闭柜门");
@@ -443,7 +523,11 @@ function createLabel2(mesh, labelName) {
     part3_b2.onPointerClickObservable.add(function() {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
-        closeCabinetDoor(mesh);
+        if(doorAngle[idx] == 0) return;
+        var rotationAxis = new BABYLON.Vector3(0, 1, 0);
+        var rotationAngle =  Math.PI / 3;
+        mesh.rotate(rotationAxis, rotationAngle, BABYLON.Space.LOCAL);
+        doorAngle[idx] = 0;
     });   
     
     presentTextBlock = textBlock2;
@@ -483,6 +567,7 @@ function createLabel2(mesh, labelName) {
     rmLabelBuild.push(textBlock1);
     rmLabelBuild.push(textBlock2);
     models.push(mesh);
+
 }
 
 function createLabel3(mesh, labelName) {
@@ -1027,7 +1112,7 @@ function moveCameraTarget(targetPosition){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "model.gltf",
+    "modelv2.gltf",
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
