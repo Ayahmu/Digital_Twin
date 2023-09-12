@@ -73,7 +73,7 @@ const camera = new BABYLON.ArcRotateCamera(
     0,                // 相机水平旋转角度
     0,                // 相机垂直旋转角度
     10,               // 相机旋转半径
-    new BABYLON.Vector3(10, 10, 10), // 相机目标点
+    new BABYLON.Vector3(0, 20, 20), // 相机目标点
     scene             // 相机所在场景
 );
 
@@ -81,7 +81,7 @@ const camera = new BABYLON.ArcRotateCamera(
 camera.panningSensibility = 120; // 增加平移灵敏度
 camera.wheelPrecision = 60;
 
-camera.position = new BABYLON.Vector3(120, 30, 120);
+camera.position = new BABYLON.Vector3(0, 20, -30);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
