@@ -5,6 +5,7 @@ import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
 import data from '../public/json/HydrogenSysInfo.json' assert {type: 'JSON'}
+import {getPDF, getJson} from "./connect.js";
 
 //创建canvas
 const canvas = document.createElement("canvas");
@@ -14,7 +15,7 @@ canvas.height = window.innerHeight;
 //将canvas添加到body中
 document.body.appendChild(canvas);
 
-let objectArray = null;
+export let objectArray = null;
 let doorAngle = [0,0,0];
 let idToDoor = {};
 idToDoor["Mesh.2971"] = 0;
@@ -34,22 +35,22 @@ function MyObject(ID, Name, Info, Manual, Url, LocID, Animation) {
 console.log('读取到的 JSON 数据：', data);
 // 创建对象实例并存储在数组中
 objectArray = data.map(jsonObject => new MyObject(
-      jsonObject.ID,
-      jsonObject.Name,
-      jsonObject.Info,
-      jsonObject.Manual,
-      jsonObject.Url,
-      jsonObject.LocID,
-      jsonObject.Animation
-    ));
+    jsonObject.ID,
+    jsonObject.Name,
+    jsonObject.Info,
+    jsonObject.Manual,
+    jsonObject.Url,
+    jsonObject.LocID,
+    jsonObject.Animation
+));
 // 打印封装后的对象数组
 console.log('对象数组：', objectArray);
 // 创建一个哈希表，将 ID 映射到数组索引
-const idToIndexMap = {};
+export const idToIndexMap = {};
 
 // 填充哈希表
 objectArray.forEach((obj, index) => {
-  idToIndexMap[obj.ID] = index;
+    idToIndexMap[obj.ID] = index;
 });
 
 // 要查找的特定 ID
@@ -235,7 +236,7 @@ function createLabelDefault(mesh, labelName) {
         removeLabel(rmLabelBuild);
         //label.isVisible = false;
     });
-   
+
     label.addControl(part0, 0, 0);
 
     // 创建第一部分
@@ -247,24 +248,24 @@ function createLabelDefault(mesh, labelName) {
     part1.cornerRadius = 10;
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    
+
     var textBlock0 = new GUI.TextBlock();
     textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part1.paddingTopInPixels = 10;
-    
+
     label.addControl(part1, 0, 0);
-    
+
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
     part2.addColumnDefinition(50);  // 第一列占百分之五十
     part2.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
     button1.width = "120px";
     button1.height = "50px";
@@ -293,32 +294,32 @@ function createLabelDefault(mesh, labelName) {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
         window.open("https://ys.mihoyo.com/");
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part2.paddingTopInPixels = 10;
-    
+
     label.addControl(part2, 1, 0);
-    
+
     // 创建第三部分
     var part3 = new GUI.Rectangle();
     part3.background = "black"; // 背景颜色
     part3.width = "310px";
     part3.height = "420px";
     part3.cornerRadius = 10;
-    
+
     part3.addControl(presentTextBlock);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part3.paddingTopInPixels = 10;
-    
+
     label.addControl(part3, 2, 0);
 
     //label创建完成,添加到texture中
@@ -331,10 +332,10 @@ function createLabelDefault(mesh, labelName) {
 
 function createLabel2(mesh, labelName) {
     var label = new GUI.Grid();
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12); 
-    label.addRowDefinition(64);  
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(64);
     label.background = "rgba(0, 0, 0, 0.6)";
     label.height = "600px";
     label.width = "380px";
@@ -345,14 +346,14 @@ function createLabel2(mesh, labelName) {
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
     let idx = idToDoor[labelName];
-    
+
     var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = getJsonName(labelName,'Name');
+    textBlock1.text = getJson(labelName,'Name');
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock1.color = "white";
-    
+
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJsonName(labelName,'Name');
+    textBlock2.text = getJson(labelName,'Name');
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -376,7 +377,7 @@ function createLabel2(mesh, labelName) {
         removeLabel(rmLabelBuild);
         //label.isVisible = false;
     });
-   
+
     label.addControl(part0, 0, 0);
 
     // 创建第一部分
@@ -388,24 +389,24 @@ function createLabel2(mesh, labelName) {
     part1.cornerRadius = 10;
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    
+
     var textBlock0 = new GUI.TextBlock();
     textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part1.paddingTopInPixels = 10;
-    
+
     label.addControl(part1, 0, 0);
-    
+
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
     part2.addColumnDefinition(50);  // 第一列占百分之五十
     part2.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
     button1.width = "120px";
     button1.height = "50px";
@@ -436,17 +437,17 @@ function createLabel2(mesh, labelName) {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
         window.open("https://ys.mihoyo.com/");
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part2.paddingTopInPixels = 10;
-    
+
     label.addControl(part2, 1, 0);
 
 
@@ -455,7 +456,7 @@ function createLabel2(mesh, labelName) {
     var part3 = new GUI.Grid();
     part3.addColumnDefinition(50);  // 第一列占百分之五十
     part3.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var part3_b1 = GUI.Button.CreateSimpleButton("button1", "打开柜门");
     part3_b1.width = "120px";
     part3_b1.height = "50px";
@@ -494,34 +495,34 @@ function createLabel2(mesh, labelName) {
         var rotationAngle =  Math.PI / 3;
         mesh.rotate(rotationAxis, rotationAngle, BABYLON.Space.LOCAL);
         doorAngle[idx] = 0;
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part3.addControl(part3_b1, 0, 0);
     part3.addControl(part3_b2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part3.paddingTopInPixels = 10;
-    
+
     label.addControl(part3, 2, 0);
 
 
-    
+
     // 创建第三部分
     var part4 = new GUI.Rectangle();
     part4.background = "black"; // 背景颜色
     part4.width = "310px";
     part4.height = "360px";
     part4.cornerRadius = 10;
-    
+
     part4.addControl(presentTextBlock);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part4.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part4.paddingTopInPixels = 10;
-    
+
     label.addControl(part4, 3, 0);
 
     //label创建完成,添加到texture中
@@ -538,10 +539,10 @@ function createLabel2(mesh, labelName) {
 
 function createLabel3(mesh, labelName) {
     var label = new GUI.Grid();
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12); 
-    label.addRowDefinition(64);  
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(64);
     label.background = "rgba(0, 0, 0, 0.6)";
     label.height = "600px";
     label.width = "380px";
@@ -551,14 +552,14 @@ function createLabel3(mesh, labelName) {
     label.isPointerBlocker = false; // 允许鼠标事件穿透
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
-    
+
     var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = getJsonName(labelName);
+    textBlock1.text = getJson(labelName, 'Name');
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock1.color = "white";
-    
+
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJsonName(labelName);
+    textBlock2.text = getJson(labelName, 'Name');
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -582,7 +583,7 @@ function createLabel3(mesh, labelName) {
         removeLabel(rmLabelBuild);
         //label.isVisible = false;
     });
-   
+
     label.addControl(part0, 0, 0);
 
     // 创建第一部分
@@ -594,24 +595,24 @@ function createLabel3(mesh, labelName) {
     part1.cornerRadius = 10;
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    
+
     var textBlock0 = new GUI.TextBlock();
     textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part1.paddingTopInPixels = 10;
-    
+
     label.addControl(part1, 0, 0);
-    
+
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
     part2.addColumnDefinition(50);  // 第一列占百分之五十
     part2.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
     button1.width = "120px";
     button1.height = "50px";
@@ -642,17 +643,17 @@ function createLabel3(mesh, labelName) {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
         window.open("https://ys.mihoyo.com/");
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part2.paddingTopInPixels = 10;
-    
+
     label.addControl(part2, 1, 0);
 
 
@@ -661,7 +662,7 @@ function createLabel3(mesh, labelName) {
     var part3 = new GUI.Grid();
     part3.addColumnDefinition(50);  // 第一列占百分之五十
     part3.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var part3_b1 = GUI.Button.CreateSimpleButton("button1", "打开阀门");
     part3_b1.width = "120px";
     part3_b1.height = "50px";
@@ -693,34 +694,34 @@ function createLabel3(mesh, labelName) {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
         closeCabinetDoor(mesh);
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part3.addControl(part3_b1, 0, 0);
     part3.addControl(part3_b2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part3.paddingTopInPixels = 10;
-    
+
     label.addControl(part3, 2, 0);
 
 
-    
+
     // 创建第三部分
     var part4 = new GUI.Rectangle();
     part4.background = "black"; // 背景颜色
     part4.width = "310px";
     part4.height = "360px";
     part4.cornerRadius = 10;
-    
+
     part4.addControl(presentTextBlock);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part4.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part4.paddingTopInPixels = 10;
-    
+
     label.addControl(part4, 3, 0);
 
     //label创建完成,添加到texture中
@@ -736,10 +737,10 @@ function createLabel3(mesh, labelName) {
 
 function createLabel4(mesh, labelName) {
     var label = new GUI.Grid();
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12);  
-    label.addRowDefinition(12); 
-    label.addRowDefinition(64);  
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(12);
+    label.addRowDefinition(64);
     label.background = "rgba(0, 0, 0, 0.6)";
     label.height = "600px";
     label.width = "380px";
@@ -749,14 +750,14 @@ function createLabel4(mesh, labelName) {
     label.isPointerBlocker = false; // 允许鼠标事件穿透
     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     label.paddingLeftInPixels = 15;
-    
+
     var textBlock1 = new GUI.TextBlock();
-    textBlock1.text = getJsonName(labelName);
+    textBlock1.text = getJson(labelName,'Name');
     textBlock1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock1.color = "white";
-    
+
     var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJsonName(labelName);
+    textBlock2.text = getJson(labelName,'Name');
     textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock2.color = "blue";
 
@@ -780,7 +781,7 @@ function createLabel4(mesh, labelName) {
         removeLabel(rmLabelBuild);
         //label.isVisible = false;
     });
-   
+
     label.addControl(part0, 0, 0);
 
     // 创建第一部分
@@ -792,24 +793,24 @@ function createLabel4(mesh, labelName) {
     part1.cornerRadius = 10;
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    
+
     var textBlock0 = new GUI.TextBlock();
     textBlock0.text = "设备信息";
     textBlock0.color = "white";
     textBlock0.fontSize = 18;
     part1.addControl(textBlock0);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part1.paddingTopInPixels = 10;
-    
+
     label.addControl(part1, 0, 0);
-    
+
     // 创建第二部分，分为两列
     var part2 = new GUI.Grid();
     part2.addColumnDefinition(50);  // 第一列占百分之五十
     part2.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var button1 = GUI.Button.CreateSimpleButton("button1", "使用说明");
     button1.width = "120px";
     button1.height = "50px";
@@ -840,17 +841,17 @@ function createLabel4(mesh, labelName) {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
         window.open("https://ys.mihoyo.com/");
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part2.addControl(button1, 0, 0);
     part2.addControl(button2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part2.paddingTopInPixels = 10;
-    
+
     label.addControl(part2, 1, 0);
 
 
@@ -859,7 +860,7 @@ function createLabel4(mesh, labelName) {
     var part3 = new GUI.Grid();
     part3.addColumnDefinition(50);  // 第一列占百分之五十
     part3.addColumnDefinition(50);  // 第二列占百分之五十
-    
+
     var part3_b1 = GUI.Button.CreateSimpleButton("button1", "减小角度");
     part3_b1.width = "120px";
     part3_b1.height = "50px";
@@ -890,34 +891,34 @@ function createLabel4(mesh, labelName) {
     part3_b2.onPointerClickObservable.add(function() {
         // 添加按钮2的点击事件处理
         console.log("按钮2被点击");
-    });   
-    
+    });
+
     presentTextBlock = textBlock2;
-    
+
     part3.addControl(part3_b1, 0, 0);
     part3.addControl(part3_b2, 0, 1);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part3.paddingTopInPixels = 10;
-    
+
     label.addControl(part3, 2, 0);
 
 
-    
+
     // 创建第三部分
     var part4 = new GUI.Rectangle();
     part4.background = "black"; // 背景颜色
     part4.width = "310px";
     part4.height = "360px";
     part4.cornerRadius = 10;
-    
+
     part4.addControl(presentTextBlock);
-    
+
     // 使用布局对齐和填充来调整元素位置
     part4.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     part4.paddingTopInPixels = 10;
-    
+
     label.addControl(part4, 3, 0);
 
     //label创建完成,添加到texture中
@@ -947,7 +948,7 @@ function createLabel(mesh, labelName)
                 break;
             case "4":
                 createLabel4(mesh, labelName);
-                break; 
+                break;
             default:
                 createLabelDefault(mesh, labelName);
         }
@@ -972,75 +973,6 @@ function removeLabel(arr) {
     rmLabelBuild = [];
 }
 
-//根据ID显示设备名称
-function getJsonName(labelName){
-    let targetObject = objectArray[idToIndexMap[labelName]]
-
-    if(targetObject)
-    {
-        return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
-    }else 
-    {
-        return "暂无设备信息"
-
-    }
-}
-
-function getJson(labelName,property){
-    let targetObject = objectArray[idToIndexMap[labelName]]
-
-    if(targetObject){
-        if(property === 'Name'){
-            return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
-        }else if(property === 'Manual'){
-            return targetObject.Manual;
-        }
-
-    }else {
-        return "暂无设备信息"
-
-    }
-}
-
-function moveCameraPosition(targetPosition){
-    var ease = new BABYLON.CubicEase();
-    ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEIN);
-
-    BABYLON.Animation.CreateAndStartAnimation(
-        'moveCamera',
-        camera,
-        'position',
-        30,
-        60,
-        camera.position,
-        targetPosition,
-        0,
-        ease,
-        ()=>{
-            moveCameraTarget(new BABYLON.Vector3(20,10,0))
-        });
-
-}
-
-function moveCameraTarget(targetPosition){
-    var ease = new BABYLON.CubicEase();
-    ease.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEOUT);
-
-    BABYLON.Animation.CreateAndStartAnimation(
-        'moveCamera',
-        camera,
-        'target',
-        30,
-        60,
-        camera.getTarget(),
-        targetPosition,
-        0,
-        ease,
-        ()=>{
-            console.log("1");
-        });
-}
-
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
@@ -1049,65 +981,14 @@ BABYLON.SceneLoader.ImportMesh(
     function (Meshes) {
         var importedMesh = Meshes[0];
         importedMesh.getChildren().forEach(function (mesh){
-            if(mesh.name === "Mesh.004"){
-                hydrogenProductionModule = mesh;
-                mesh.actionManager = actionManager;
-            }
-            if(mesh.name === "Mesh.020"){
-                purificationModule = mesh;
-                mesh.actionManager = actionManager;
-            }
-            if(mesh.name === "Mesh.005"){
-                airControlModule = mesh;
-                mesh.actionManager = actionManager;
-            }else {
+            //仅为json文件中存在的设备绑定事件
+            if(getJson(mesh.id) !== '暂无设备信息'){
                 childMesh.push(mesh);
                 mesh.actionManager = actionManager;
             }
-        });
-});
 
-function getPDF(labelName){
-    let Manual = getJson(labelName,'Manual');
-
-    fetch('http://192.168.0.174:8003/api/data',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({Manual: Manual}),
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            //打开pdf文件
-            if(data.status === '成功'){
-                window.open(data.path, "_blank");
-                console.log("ftp下载文件成功。")
-            }
-            else if(data.status === '本地文件'){
-                window.open(data.path, "_blank");
-                console.log("已使用本地文件！");
-            }
-        })
-        .catch(err => {
-            console.log(err);
         });
-}
-
-function fetchIsWarning(){
-    fetch('http://192.168.0.174:8003/api/warning',{
-        method: 'POST'
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
-}
-setInterval(fetchIsWarning,5000);
+    });
 
 //鼠标按下时取消绑定事件,防止卡顿
 scene.onPointerObservable.add((pointerInfo) => {

@@ -33,4 +33,7 @@ yarn dev
 
 
 ## 修改配置参数
-在src/config.py修改ftp和mqtt连接的参数，包括host和port
+在src/config.py修改ftp和mqtt连接的参数，包括host和port。  
+打开后端后，可以使用终端命令  
+`mosquitto_pub -h broker.emqx.io -p 1883 -t test/topic -m "test"`  
+发布消息测试。
