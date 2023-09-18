@@ -64,7 +64,12 @@ export function getJson(labelName,property){
     if(targetObject){
         if(property === 'Name'){
             return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
-        }else if(property === 'Manual'){
+        }
+        else if(property == 'Url')
+        {
+            return targetObject.url;
+        }
+        else if(property === 'Manual'){
             return targetObject.Manual;
         }
 
