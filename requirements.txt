@@ -1,4 +1,0 @@
-requests~=2.31.0
-paho-mqtt~=1.6.1
-flask~=2.0.3
-flask-cors

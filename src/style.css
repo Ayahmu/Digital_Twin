@@ -21,3 +21,38 @@ canvas{
   color: greenyellow;
   z-index: 2;
 }
+
+#leftLabel{
+  position: absolute;
+  left: 0;
+  background-color: rgba(98, 98, 255, 0.6);
+  width: 20%;
+  height: 100%;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+#rightLabel{
+  position: absolute;
+  right: 0;
+  background-color: rgba(98, 98, 255, 0.6);
+  width: 20%;
+  height: 100%;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.buttonLabel{
+  position: relative;
+  top: 10px;
+  left: 10px;
+  width: 90%;
+  height: 30px;
+  visibility: hidden;
+}
+
+.icon{
+  height: 30px;
+  visibility: visible;
+  cursor: pointer;
+}
