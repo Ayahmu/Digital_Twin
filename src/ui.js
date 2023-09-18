@@ -27,3 +27,12 @@ const close_btn = document.getElementById("close_btn");
 close_btn.addEventListener('click', function (){
     console.log(close_btn.id);
 })
+
+export {
+    back_btn,
+    home_btn,
+    display_btn,
+    play_btn,
+    info_btn,
+    close_btn
+};
