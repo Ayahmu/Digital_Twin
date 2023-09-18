@@ -1,7 +1,8 @@
-*{
-  margin: 0;
-  padding: 0;
+html, body {
+  font-family: "Consolas", sans-serif;
+  background-color: cornflowerblue;
 }
+
 canvas{
   position: fixed;
   top: 0;
@@ -9,50 +10,74 @@ canvas{
   width: 100vw;
   height: 100vh;
 }
+
 #panelContainer {
   position: relative;
   z-index: 1;
 }
+
 #fpsDisplay {
   position: absolute;
   top: 10px;
   left: 10px;
   font-size: 20px;
-  color: greenyellow;
+  color: #ffffff;
   z-index: 2;
+}
+
+#leftLabel,#rightLabel,#topLabel{
+  background: #27596e;
+  width: 30vw;
+  height: 90vh;
+  top: 60px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-radius: 43px;
+  backdrop-filter: blur(12px);
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
+  border: 5px rgba(255,255,255,0.4) solid;
+  border-bottom: 5px rgba(40,40,40,0.35) solid;
+  border-right: 5px rgba(40,40,40,0.35) solid;
 }
 
 #leftLabel{
   position: absolute;
-  left: 0;
-  background-color: rgba(98, 98, 255, 0.6);
-  width: 20%;
-  height: 100%;
-  border-radius: 10px;
+  left: 10px;
+  display: none;
   z-index: 2;
 }
 
 #rightLabel{
   position: absolute;
-  right: 0;
-  background-color: rgba(98, 98, 255, 0.6);
-  width: 20%;
-  height: 100%;
-  border-radius: 10px;
+  right: 10px;
+  display: none;
   z-index: 2;
 }
 
-.buttonLabel{
-  position: relative;
+#topLabel{
+  position: absolute;
   top: 10px;
-  left: 10px;
-  width: 90%;
-  height: 30px;
+  right: 10px;
+  height: 35px;
+  z-index: 2;
+}
+
+.button{
   visibility: hidden;
 }
 
 .icon{
-  height: 30px;
+  margin: 2px;
+  height: 25px;
   visibility: visible;
   cursor: pointer;
+  z-index: 2;
+}
+
+#time{
+  position: relative;
+  height: 25px;
 }

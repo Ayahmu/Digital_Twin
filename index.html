@@ -5,38 +5,41 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="src/style.css">
+    <link rel="stylesheet" type="text/css" href="src/animate.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/connect.js"></script>
+    <script type="module" src="/src/ui.js"></script>
   </head>
   <body>
     <div id="leftLabel">
     </div>
     <div id="rightLabel">
-      <div class="buttonLabel">
-        <button id="back_btn">
-          <img src="public/icons/返回.svg" alt="Icon" class="icon">
-        </button>
-        <button id="home_btn">
-          <img src="public/icons/主页.svg" alt="Icon" class="icon">
-        </button>
-        <button id="display_btn">
-          <img src="public/icons/显示.svg" alt="Icon" class="icon">
-        </button>
-        <button id="play_btn">
-          <img src="public/icons/播放.svg" alt="Icon" class="icon">
-        </button>
-        <button id="info_btn">
-          <img src="public/icons/设备信息.svg" alt="Icon" class="icon">
-        </button>
-        <button id="close_btn">
-          <img src="public/icons/关闭.svg" alt="Icon" class="icon">
-        </button>
-      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-    <script type="module" src="/src/main.js"></script>
-    <script type="module" src="/src/connect.js"></script>
-    <script type="module" src="/src/ui.js"></script>
+    <div id="topLabel">
+      <button id="back_btn" class="button">
+        <img src="public/icons/返回.svg" alt="Icon" class="icon" title="返回">
+      </button>
+      <button id="home_btn" class="button">
+        <img src="public/icons/主页.svg" alt="Icon" class="icon" title="主页">
+      </button>
+      <button id="display_btn" class="button">
+        <img src="public/icons/显示.svg" alt="Icon" class="icon" title="显示">
+      </button>
+      <button id="play_btn" class="button">
+        <img src="public/icons/播放.svg" alt="Icon" class="icon" title="播放动画">
+      </button>
+      <button id="info_btn" class="button">
+        <img src="public/icons/设备信息.svg" alt="Icon" class="icon" title="设备信息">
+      </button>
+      <button id="close_btn" class="button">
+        <img src="public/icons/关闭.svg" alt="Icon" class="icon" title="关闭">
+      </button>
+      <span id="time"></span>
+    </div>
     <div id="panelContainer"></div>
     <div id="fpsDisplay"></div>
   </body>
