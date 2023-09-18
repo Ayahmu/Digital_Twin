@@ -14,6 +14,7 @@ import {
     info_btn,
     close_btn
 } from './ui.js';
+import {http_config} from "./config.js";
 
 //创建canvas
 const canvas = document.createElement("canvas");
@@ -415,11 +416,11 @@ home_btn.addEventListener('click', function(){
     var newPosition = new BABYLON.Vector3(0, 20, -30); 
     camera.position = newPosition;
     
-    if(selectMesh!=null)
-    {
-        selectMesh.position = currentPosMesh;
-        camera.setTarget(new BABYLON.Vector3(0, 20, 20));
-    }
+    // if(selectMesh!=null)
+    // {
+    //     selectMesh.position = currentPosMesh;
+    //     camera.setTarget(new BABYLON.Vector3(0, 20, 20));
+    // }
 
     console.log("Camera reset");
 });
@@ -447,17 +448,7 @@ back_btn.addEventListener('click', function (){
 let selectUrl;
 
 info_btn.addEventListener('click', function (){
-    selectUrl = getJson(selectName, "Url");
-    console.log(selectUrl);
-    if(selectUrl != "暂无设备信息")
-    {
-        window.open(selectUrl);
-    }
-    else
-    {
-        console.log("no url");
-        
-    }
+    getPDF(selectName);
 });
 
 function removeLabel(arr) {
@@ -511,38 +502,6 @@ scene.onPointerObservable.add((pointerInfo) => {
             break;
     }
 });
-
-const lightColor = new BABYLON.Color3(0.6,0.6,0.5)
-
-const light1 = new BABYLON.DirectionalLight(
-    "light",
-    new BABYLON.Vector3(1,-1,1),//光源方向
-    scene
-);
-light1.intensity = 1;
-light1.diffuse = lightColor;
-const light2 = new BABYLON.DirectionalLight(
-    "light",
-    new BABYLON.Vector3(-1,-1,1),//光源方向
-    scene
-);
-light2.intensity = 1;
-light2.diffuse = lightColor;
-const light3 = new BABYLON.DirectionalLight(
-    "light",
-    new BABYLON.Vector3(-1,-1,-1),//光源方向
-    scene
-);
-light3.intensity = 1;
-light3.diffuse = lightColor;
-const light4 = new BABYLON.DirectionalLight(
-    "light",
-    new BABYLON.Vector3(1,-1,-1),//光源方向
-    scene
-);
-light4.intensity = 1;
-light4.diffuse = lightColor;
-
 
 scene.registerBeforeRender(function(){
     //计算帧率

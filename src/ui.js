@@ -14,16 +14,6 @@ home_btn.addEventListener('click', function (){
 
 const display_btn = document.getElementById("display_btn");
 display_btn.addEventListener('click', function (){
-    console.log(display_btn.id);
-})
-
-const play_btn = document.getElementById("play_btn");
-play_btn.addEventListener('click', function (){
-    console.log(play_btn.id);
-})
-
-const info_btn = document.getElementById("info_btn");
-info_btn.addEventListener('click', function (){
     if(!leftLabel.style.display || !rightLabel.style.display){
         leftLabel.style.display = "block";
         rightLabel.style.display = "block";
@@ -34,6 +24,16 @@ info_btn.addEventListener('click', function (){
     rightLabel.classList.add("right-slide-in");
 })
 
+const play_btn = document.getElementById("play_btn");
+play_btn.addEventListener('click', function (){
+
+})
+
+const info_btn = document.getElementById("info_btn");
+info_btn.addEventListener('click', function (){
+
+})
+
 const close_btn = document.getElementById("close_btn");
 close_btn.addEventListener('click', function (){
     leftLabel.classList.remove("left-slide-in");
@@ -41,6 +41,16 @@ close_btn.addEventListener('click', function (){
     rightLabel.classList.remove("right-slide-in");
     rightLabel.classList.add("right-slide-out");
 })
+
+document.addEventListener('DOMContentLoaded', function() {
+    var currentDatetime = new Date();
+
+    var year = currentDatetime.getFullYear();
+    var month = String(currentDatetime.getMonth() + 1).padStart(2, '0');
+    var day = String(currentDatetime.getDate()).padStart(2, '0');
+
+    document.getElementById("time").textContent = year + "-" + month + "-" + day;
+});
 
 export {
     back_btn,
