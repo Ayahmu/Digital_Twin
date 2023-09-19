@@ -14,7 +14,6 @@ import {
     info_btn,
     close_btn
 } from './ui.js';
-import {http_config} from "./config.js";
 
 //创建canvas
 const canvas = document.createElement("canvas");
@@ -87,13 +86,13 @@ const camera = new BABYLON.ArcRotateCamera(
     0,                // 相机水平旋转角度
     0,                // 相机垂直旋转角度
     10,               // 相机旋转半径
-    new BABYLON.Vector3(0, 20, 20), // 相机目标点
+    new BABYLON.Vector3(0, 20, 60), // 相机目标点
     scene             // 相机所在场景
 );
 
 // 设置相机的灵敏度
 camera.panningSensibility = 120; // 增加平移灵敏度
-camera.wheelPrecision = 60;
+camera.wheelPrecision = 6;
 
 camera.position = new BABYLON.Vector3(0, 20, -30);
 
@@ -107,10 +106,7 @@ let highLightLayer = new BABYLON.HighlightLayer('highLightLayer',scene,{camera:c
 //添加鼠标监听事件
 const actionManager = new BABYLON.ActionManager(scene);
 
-//模型
-let hydrogenProductionModule;
-let purificationModule;
-let airControlModule;
+
 let childMesh = [];
 
 //模型数组
@@ -146,72 +142,12 @@ function createLabel(mesh, labelName) {
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     models.push(mesh);
     console.log(mesh.position);
-    return;
-    var label = new GUI.Grid();
-    label.addRowDefinition(10);  // 第一部分占百分之十五
-    label.addRowDefinition(90);  // 第二部分占百分之十五
-    label.background = "rgba(0, 0, 0, 0.6)";
-    label.height = "600px";
-    label.width = "380px";
-    label.cornerRadius = 20;
-    label.thickness = 1;
-    label.linkOffsetY = -100;
-    label.isPointerBlocker = false; // 允许鼠标事件穿透
-    label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    label.paddingLeftInPixels = 15;
 
-    var textBlock2 = new GUI.TextBlock();
-    textBlock2.text = getJson(labelName,'Name');
-    textBlock2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    textBlock2.color = "blue";
-    tb.text = getJson(labelName,'Name');
-    // 创建第一部分
-    var part1 = new GUI.Rectangle();
-    part1.background = "black"; // 背景颜色
-    part1.width = "160px";
-    part1.height = "60px";
-    part1.alpha = 1;
-    part1.cornerRadius = 10;
-    part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    var modelNameElm = document.getElementById("modelName");
+    modelNameElm.innerHTML = getJson(labelName,'Name') + "-设备信息";
 
-    var textBlock0 = new GUI.TextBlock();
-    textBlock0.text = "设备信息";
-    textBlock0.color = "white";
-    textBlock0.fontSize = 18;
-    part1.addControl(textBlock0);
-
-    // 使用布局对齐和填充来调整元素位置
-    part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    part1.paddingTopInPixels = 10;
-
-    label.addControl(part1, 0, 0);
-
-
-
-    presentTextBlock = textBlock2;
-
-    // 创建第三部分
-    var part3 = new GUI.Rectangle();
-    part3.background = "black"; // 背景颜色
-    part3.width = "310px";
-    part3.height = "510px";
-    part3.cornerRadius = 10;
-
-    part3.addControl(presentTextBlock);
-
-    // 使用布局对齐和填充来调整元素位置
-    part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    part3.paddingTopInPixels = 10;
-
-    label.addControl(part3, 2, 0);
-
-    //label创建完成,添加到texture中
-    advancedTexture.addControl(label);
-
-    highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
-    rmLabelBuild.push(label);
-    models.push(mesh);
+    var modelInfoElm = document.getElementById("modelInfo");
+    modelInfoElm.innerHTML = getJson(labelName,"Info");
 }
 // var sv = new GUI.ScrollViewer();
 // var tb = new GUI.TextBlock();

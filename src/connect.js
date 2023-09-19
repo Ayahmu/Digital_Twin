@@ -8,8 +8,6 @@ var clientId = mqtt_config.clientId;  // 客户端ID
 var topic = mqtt_config.topic; //MQTT服务器订阅主题
 
 var url = http_config.url;
-var method = http_config.method;
-var headers = http_config.headers;
 
 var client = new Paho.MQTT.Client(host, port, clientId);
 
@@ -63,16 +61,23 @@ export function getJson(labelName,property){
 
     if(targetObject){
         if(property === 'Name'){
-            return "名称：" + targetObject.Name + "\n" + "信息：" + targetObject.Info;
+            return targetObject.Name;
         }
-        else if(property == 'Url')
+        else if(property === 'Info')
+        {
+            if(targetObject.info){
+                return targetObject.info;
+            }
+            return "暂无设备信息";
+        }
+        else if(property === 'Url')
         {
             return targetObject.url;
         }
-        else if(property == 'Manual'){
+        else if(property === 'Manual'){
             return targetObject.Manual;
         }
-        else if(property == 'Animation')
+        else if(property === 'Animation')
         {
             return targetObject.Animation;
         }
