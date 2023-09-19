@@ -69,8 +69,12 @@ export function getJson(labelName,property){
         {
             return targetObject.url;
         }
-        else if(property === 'Manual'){
+        else if(property == 'Manual'){
             return targetObject.Manual;
+        }
+        else if(property == 'Animation')
+        {
+            return targetObject.Animation;
         }
 
     }else {

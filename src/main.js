@@ -445,6 +445,47 @@ back_btn.addEventListener('click', function (){
     }
 });
 
+function playAnimation(type)
+{
+    let video_url = "";
+    switch(type)
+    {
+        case "4":
+            //球阀
+            video_url = "video/球阀.mkv";
+            break;
+        case "5":
+            //三通
+            video_url = "video/三通.mkv";
+            break;
+        case "3":
+            //电磁
+            video_url = "video/电磁阀.mkv";
+            break;
+        case "6":
+            //发电机，自行配置JSON文件
+            video_url = "video/发电机.mkv";
+            break;
+        default:
+            return;
+    }
+
+    var newWindow = window.open('', '_blank', 'fullscreen=yes');   
+    // 在新窗口中创建一个视频播放器
+    newWindow.document.write('<html><head><title>全屏视频播放器</title></head><body style="margin: 0; overflow: hidden;"><video src="' + video_url + '" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video></body></html>');
+}
+
+play_btn.addEventListener('click', function(){
+    if(selectMesh==null)
+        console.log("no mesh");
+    else
+    {
+        let animation = getJson(selectName, "Animation");
+        playAnimation(animation);
+    }
+
+})
+
 let selectUrl;
 
 info_btn.addEventListener('click', function (){
