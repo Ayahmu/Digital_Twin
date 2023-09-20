@@ -40,7 +40,7 @@ function MyObject(ID, Name, Info, Manual, Url, LocID, Animation) {
     this.Animation = Animation;
 }
 
-console.log('读取到的 JSON 数据：', data);
+
 // 创建对象实例并存储在数组中
 objectArray = data.map(jsonObject => new MyObject(
     jsonObject.ID,
@@ -51,8 +51,8 @@ objectArray = data.map(jsonObject => new MyObject(
     jsonObject.LocID,
     jsonObject.Animation
 ));
-// 打印封装后的对象数组
-console.log('对象数组：', objectArray);
+
+
 // 创建一个哈希表，将 ID 映射到数组索引
 export const idToIndexMap = {};
 
@@ -80,21 +80,24 @@ scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
 scene.environmentIntensity = 0.2;
 
+let initTarget = new BABYLON.Vector3(-37.95875211948178, 73.00066611807962, 64.42490800253104); // 相机目标点
+let initPos = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483);
+
 // 创建相机
 const camera = new BABYLON.ArcRotateCamera(
     "camera",
     0,                // 相机水平旋转角度
     0,                // 相机垂直旋转角度
     10,               // 相机旋转半径
-    new BABYLON.Vector3(0, 20, 60), // 相机目标点
+    new BABYLON.Vector3(-37.95875211948178, 73.00066611807962, 64.42490800253104), // 相机目标点
     scene             // 相机所在场景
 );
-
 // 设置相机的灵敏度
 camera.panningSensibility = 120; // 增加平移灵敏度
 camera.wheelPrecision = 6;
 
-camera.position = new BABYLON.Vector3(0, 20, -30);
+camera.position = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483
+    );
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -135,13 +138,21 @@ advancedTexture.renderScale = 1;
 
 let rmLabelBuild = [];
 let selectMesh, selectName;
+let clickPos;
+let basePosition = new BABYLON.Vector3(38.92868423461914,-0.002165344078093767,49.058162689208984); 
 function createLabel(mesh, labelName) {
 
     selectMesh = mesh;
     selectName = labelName;
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     models.push(mesh);
-    console.log(mesh.position);
+    var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
+
+    if (pickInfo.hit) {
+        // 鼠标点击位置的世界坐标
+        clickPos = pickInfo.pickedPoint;
+        console.log("鼠标点击位置的世界坐标：", clickPos);
+    }
 
     var modelNameElm = document.getElementById("modelName");
     modelNameElm.innerHTML = getJson(labelName,'Name') + "-设备信息";
@@ -308,7 +319,7 @@ function createLabel(mesh, labelName) {
 
 // createButtons();
 
-let currentPosMesh, currentPosCamera, currentRotCamera;
+let currentPosMesh, currentPosCamera, currentTargetCamera;
 let targetPosCamera, targetPosMesh;
 targetPosCamera = new BABYLON.Vector3(-100,-100,-100);
 targetPosMesh= new BABYLON.Vector3(-100,-105,-100);
@@ -320,15 +331,14 @@ function moveMeshWithCamera(mesh)
         return;
     currentPosMesh = mesh.position.clone();
     currentPosCamera = camera.position.clone();
-    currentRotCamera = camera.rotation.clone();
+    currentTargetCamera = camera.target.clone();
 
-    camera.position.z += 1500;
     mesh.position.z += 1500;
-    camera.position.y += 1500;
     mesh.position.y += 1500;
 
+    camera.position = clickPos.clone().add(new BABYLON.Vector3(5, 1500, 1500));
 
-    camera.setTarget(mesh.position);
+    camera.setTarget(clickPos.add(new BABYLON.Vector3(0, 1500, 1500)));
     isLooking = true;
 }
 
@@ -338,9 +348,8 @@ function resetMeshWithCamera(mesh)
         return;
     camera.position = currentPosCamera;
     mesh.position = currentPosMesh;
-    camera.rotation = currentRotCamera;
+    camera.setTarget(currentTargetCamera);
 
-    camera.setTarget(new BABYLON.Vector3(0, 20, 20));
     isLooking = false;
 }
 
@@ -349,8 +358,8 @@ home_btn.addEventListener('click', function(){
     var newRotation = new BABYLON.Vector3(0, 0, 0); 
     camera.rotation = newRotation;
 
-    var newPosition = new BABYLON.Vector3(0, 20, -30); 
-    camera.position = newPosition;
+    camera.position = initPos;
+    camera.setTarget(initTarget);
     
     // if(selectMesh!=null)
     // {
@@ -384,6 +393,7 @@ back_btn.addEventListener('click', function (){
 function playAnimation(type)
 {
     let video_url = "";
+
     switch(type)
     {
         case "4":
@@ -412,6 +422,9 @@ function playAnimation(type)
 }
 
 play_btn.addEventListener('click', function(){
+    console.log(camera.position);
+    console.log(camera.rotation);
+    console.log(camera.target);
     if(selectMesh==null)
         console.log("no mesh");
     else
