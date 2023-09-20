@@ -155,7 +155,7 @@ function createLabel(mesh, labelName) {
     }
 
     var modelNameElm = document.getElementById("modelName");
-    modelNameElm.innerHTML = getJson(labelName,'Name') + "-设备信息";
+    modelNameElm.innerHTML = getJson(labelName,'Name');
 
     var modelInfoElm = document.getElementById("modelInfo");
     modelInfoElm.innerHTML = getJson(labelName,"Info");
@@ -360,6 +360,7 @@ home_btn.addEventListener('click', function(){
 
     camera.position = initPos;
     camera.setTarget(initTarget);
+    camera.inertia = 0;
     
     // if(selectMesh!=null)
     // {

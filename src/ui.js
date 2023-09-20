@@ -1,4 +1,3 @@
-var leftLabel = document.getElementById("leftLabel");
 var rightLabel = document.getElementById("rightLabel");
 
 
@@ -14,12 +13,9 @@ home_btn.addEventListener('click', function (){
 
 const display_btn = document.getElementById("display_btn");
 display_btn.addEventListener('click', function (){
-    if(!leftLabel.style.display || !rightLabel.style.display){
-        leftLabel.style.display = "block";
+    if(!rightLabel.style.display){
         rightLabel.style.display = "block";
     }
-    leftLabel.classList.remove("left-slide-out");
-    leftLabel.classList.add("left-slide-in");
     rightLabel.classList.remove("right-slide-out");
     rightLabel.classList.add("right-slide-in");
 })
@@ -36,8 +32,6 @@ info_btn.addEventListener('click', function (){
 
 const close_btn = document.getElementById("close_btn");
 close_btn.addEventListener('click', function (){
-    leftLabel.classList.remove("left-slide-in");
-    leftLabel.classList.add("left-slide-out");
     rightLabel.classList.remove("right-slide-in");
     rightLabel.classList.add("right-slide-out");
 })

@@ -1,6 +1,13 @@
-html, body {
-  font-family: "Consolas", sans-serif;
-  background-color: cornflowerblue;
+body,
+html,
+.main {
+  width: 100%;
+  height: 100%
+}
+
+.main {
+  position: relative;
+  background-size: cover;
 }
 
 canvas{
@@ -25,74 +32,18 @@ canvas{
   z-index: 2;
 }
 
-#leftLabel,#rightLabel,#topLabel{
-  background: #27596e;
-  width: 30vw;
-  height: 90vh;
-  top: 60px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  border-radius: 43px;
-  backdrop-filter: blur(12px);
-  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
-  border: 5px rgba(255,255,255,0.4) solid;
-  border-bottom: 5px rgba(40,40,40,0.35) solid;
-  border-right: 5px rgba(40,40,40,0.35) solid;
-}
-
-#leftLabel{
-  position: absolute;
-  left: 10px;
-  display: none;
-  z-index: 2;
-}
-
-#rightLabel{
-  position: absolute;
-  right: 10px;
-  display: none;
-  z-index: 2;
-}
-
-#topLabel{
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  height: 35px;
-  z-index: 2;
-}
-
-#info{
-  position: relative;
-  left: 5%;
-  top: 10%;
-  width: 90%;
-  height: 375px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  border-radius: 43px;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0,191,255, 0.388);
-  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px;
-  border: 0 rgba(255,255,255,0.4) solid;
-  border-bottom: 0 rgba(40,40,40,0.35) solid;
-  border-right: 0 rgba(40,40,40,0.35) solid;
-  overflow: auto;
-}
-
 .button{
+  right: -70%;
   visibility: hidden;
+  position: relative;
+  width: 10px;
+  height: 1%;
+  z-index: 2;
 }
 
 .icon{
   margin: 2px;
-  height: 25px;
+  height: 20px;
   visibility: visible;
   cursor: pointer;
   z-index: 2;
@@ -100,35 +51,101 @@ canvas{
 
 #time{
   position: relative;
-  height: 25px;
+  top: -5px;
+  z-index: 2;
+  color: #0efcff;
+}
+
+.nav {
+  position: relative;
+  top: .5vw;
+  width: 100%;
+  height: 5vw;
+  background: url(public/img/top.png) no-repeat;
+  background-size: 100%;
+  text-align: center;
+  line-height: 4vw;
+  color: #0efcff;
+  font-size: 1.4vw;
+  letter-spacing: .4vw;
   z-index: 2;
 }
 
-.card {
-  left: 5%;
-  top: 10%;
-  width: 80%;
-  height: 30%;
+.nav_btn {
+  position: absolute;
+  top: 1.5vw;
+  width: 100%;
+  height: 2vw;
+}
+
+.btn_right {
+  float: right;
+  width: 25%;
+  margin-right: 5%;
+  height: 100%;
+}
+
+.btn_list {
   position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  background-color: rgba(0,191,255, 0.388);
-  padding: 32px;
-  border-radius: 10px;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+  float: left;
+  width: 5.5vw;
+  height: 1.6vw;
+  text-align: center;
+  line-height: 1.6vw;
+  font-size: .9vw;
+  color: #0efcff;
+  letter-spacing: .1vw;
+  cursor: pointer;
+}
+
+
+.btn_left a,
+.btn_right a {
+  display: inline-block;
+}
+
+.btn_left a:nth-child(2) {
+  margin: 0 .6vw;
+}
+
+.btn_left a:nth-child(4) {
+  margin-left: .6vw;
+}
+
+.btn_right a:nth-child(2) {
+  margin: 0 .6vw;
+}
+
+.btn_right a:nth-child(4) {
+  margin-left: .6vw;
+}
+
+.btn_list:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #6176AF;
+  transform: skewX(-38deg);
+}
+
+.btn_list:hover::before {
+  border-color: #0efcff;
+  box-shadow: 1px 1px 3px 1px #0efcff inset;
+}
+
+.listActive:before {
+  border-color: #0efcff;
+  box-shadow: 1px 1px 3px 1px #0efcff inset;
 }
 
 .content {
-  width: 100%;
-  height: 80%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 20px;
-  color: #e8e8e8;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+  position: relative;
+  width: 97%;
+  height: 87%;
+  margin: auto;
 }
 
 .content .heading {
@@ -138,26 +155,65 @@ canvas{
   font-size: 32px;
 }
 
-.para {
+.baseBox {
   position: relative;
-  top: 20%;
+  float: left;
+  width: 48.8%;
+  height: 32.3%;
+  border: 1px solid #6176AF;
+  background: rgba(11, 21, 44, 0.60);
+  border-radius: 5px;
+}
+
+
+.leftBox {
+  float: left;
   height: 100%;
-  line-height: 1.5;
-  overflow: auto;
+  width: 34.5%;
+  /* background: yellow; */
 }
 
-.para::-webkit-scrollbar{
-  width: 8px;
-  height: 8px;
+.rightBox {
+  float: left;
+  height: 100%;
+  width: 34.5%;
 }
 
-.para::-webkit-scrollbar-thumb {
-  border-radius: 20px;
-  background: #ffffff;
+.boxTitle {
+  font-size: 1vw;
+  color: #0efcff;
+  width: 80%;
+  margin-left: .8vw;
+  margin-top: .5vw;
 }
 
-.para::-webkit-scrollbar-track {
-  background-color: #6c6c6c; /* 设置滚动条轨道的颜色 */
-  border-radius: 20px;
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+
+.baseBox {
+  width: 100%;
+  border: none;
+  background: none;
+}
+
+.boxTitle {
+  font-size: .8vw;
+  width: 38%;
+  margin-top: 1vw;
+  text-align: center;
+}
+
+.baseBox1 .hardware,
+.baseBox2 img,
+.baseBox3 img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 

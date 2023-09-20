@@ -4,10 +4,11 @@
 
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="src/style.css">
     <link rel="stylesheet" type="text/css" href="src/animate.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="src/ui.css">
     <title>Vite App</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
     <script type="module" src="/src/main.js"></script>
@@ -15,40 +16,41 @@
     <script type="module" src="/src/ui.js"></script>
   </head>
   <body>
-    <div id="leftLabel">
-    </div>
-    <div id="rightLabel">
-      <div class="card">
-        <div class="content">
-          <div class="heading" id="modelName">
-            设备信息
-          </div>
-          <div class="para" id="modelInfo">
-              电子科技大学（University of Electronic Science and Technology of China）是教育部直属、国家“985工程”“211工程”重点建设大学、国家“双一流”建设高校（A类），坐落于有“天府之国”之称的西部经济、文化、交通中心——四川省成都市，是一所完整覆盖整个电子类学科，以电子信息科学技术为核心，以工为主，理工渗透，理、工、管、文、医协调发展的多科性研究型大学，被誉为“电子类院校排头兵”“民族电子工业摇篮”。电子科技大学（University of Electronic Science and Technology of China）是教育部直属、国家“985工程”“211工程”重点建设大学、国家“双一流”建设高校（A类），坐落于有“天府之国”之称的西部经济、文化、交通中心——四川省成都市，是一所完整覆盖整个电子类学科，以电子信息科学技术为核心，以工为主，理工渗透，理、工、管、文、医协调发展的多科性研究型大学，被誉为“电子类院校排头兵”“民族电子工业摇篮”。电子科技大学（University of Electronic Science and Technology of China）是教育部直属、国家“985工程”“211工程”重点建设大学、国家“双一流”建设高校（A类），坐落于有“天府之国”之称的西部经济、文化、交通中心——四川省成都市，是一所完整覆盖整个电子类学科，以电子信息科学技术为核心，以工为主，理工渗透，理、工、管、文、医协调发展的多科性研究型大学，被誉为“电子类院校排头兵”“民族电子工业摇篮”。电子科技大学（University of Electronic Science and Technology of China）是教育部直属、国家“985工程”“211工程”重点建设大学、国家“双一流”建设高校（A类），坐落于有“天府之国”之称的西部经济、文化、交通中心——四川省成都市，是一所完整覆盖整个电子类学科，以电子信息科学技术为核心，以工为主，理工渗透，理、工、管、文、医协调发展的多科性研究型大学，被誉为“电子类院校排头兵”“民族电子工业摇篮”。
+    <div class="nav">数字孪生</div>
+    <div class="content">
+      <div class="leftBox right" style="width:22%">
+        <div class="baseBox baseBox1" style="margin-bottom:15px;height:40%" id="rightLabel">
+          <img src="img/right.png" class="hardware" alt="">
+          <div class="csbaseBox1">
+            <div class="boxTitle" id="modelName">设备信息展示</div>
+            <div class="content1" id="modelInfo">
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="topLabel">
-      <button id="back_btn" class="button">
-        <img src="public/icons/返回.svg" alt="Icon" class="icon" title="返回">
-      </button>
-      <button id="home_btn" class="button">
-        <img src="public/icons/主页.svg" alt="Icon" class="icon" title="主页">
-      </button>
-      <button id="display_btn" class="button">
-        <img src="public/icons/显示.svg" alt="Icon" class="icon" title="显示">
-      </button>
-      <button id="play_btn" class="button">
-        <img src="public/icons/播放.svg" alt="Icon" class="icon" title="播放动画">
-      </button>
-      <button id="info_btn" class="button">
-        <img src="public/icons/设备信息.svg" alt="Icon" class="icon" title="设备信息">
-      </button>
-      <button id="close_btn" class="button">
-        <img src="public/icons/关闭.svg" alt="Icon" class="icon" title="关闭">
-      </button>
-      <span id="time"></span>
+    <div class="nav_btn">
+      <div class="btn_right">
+        <button id="back_btn" class="button">
+          <img src="public/icons/返回.svg" alt="Icon" class="icon" title="返回">
+        </button>
+        <button id="home_btn" class="button">
+          <img src="public/icons/主页.svg" alt="Icon" class="icon" title="主页">
+        </button>
+        <button id="display_btn" class="button">
+          <img src="public/icons/显示.svg" alt="Icon" class="icon" title="显示">
+        </button>
+        <button id="play_btn" class="button">
+          <img src="public/icons/播放.svg" alt="Icon" class="icon" title="播放动画">
+        </button>
+        <button id="info_btn" class="button">
+          <img src="public/icons/设备信息.svg" alt="Icon" class="icon" title="设备信息">
+        </button>
+        <button id="close_btn" class="button">
+          <img src="public/icons/关闭.svg" alt="Icon" class="icon" title="关闭">
+        </button>
+        <span id="time"></span>
+      </div>
     </div>
     <div id="panelContainer"></div>
     <div id="fpsDisplay"></div>
