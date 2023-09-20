@@ -75,7 +75,8 @@ const engine = new BABYLON.Engine(canvas,true,{stencil:true});
 
 //创建场景
 const scene = new BABYLON.Scene(engine,false);
-const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("texture/hdr/environment.env", scene);
+// const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("texture/hdr/environment.env", scene);
+var hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/environment.hdr", scene, 512);
 scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
 scene.environmentIntensity = 1;
@@ -495,6 +496,7 @@ scene.onPointerObservable.add((pointerInfo) => {
 });
 
 scene.registerBeforeRender(function(){
+
     //计算帧率
     var fps = engine.getFps().toFixed();
 

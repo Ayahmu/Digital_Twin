@@ -89,6 +89,12 @@ export function getJson(labelName,property){
 
 export function getPDF(labelName){
     let Manual = getJson(labelName,'Manual');
+
+    if(Manual === "暂无设备信息"){
+        alert(Manual);
+        return;
+    }
+
     let file_path = path.join(http_config.url, Manual);
     file_path = file_path.replace('http:/','http://');
     console.log(file_path);

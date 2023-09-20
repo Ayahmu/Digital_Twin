@@ -61,7 +61,7 @@ canvas{
   top: .5vw;
   width: 100%;
   height: 5vw;
-  background: url(public/img/top.png) no-repeat;
+  background: url(../public/img/top.png) no-repeat;
   background-size: 100%;
   text-align: center;
   line-height: 4vw;
