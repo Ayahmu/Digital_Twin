@@ -78,7 +78,7 @@ const scene = new BABYLON.Scene(engine,false);
 const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("texture/hdr/environment.env", scene);
 scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
-scene.environmentIntensity = 0.2;
+scene.environmentIntensity = 1;
 
 let initTarget = new BABYLON.Vector3(-37.95875211948178, 73.00066611807962, 64.42490800253104); // 相机目标点
 let initPos = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483);
@@ -336,7 +336,7 @@ function moveMeshWithCamera(mesh)
     mesh.position.z += 1500;
     mesh.position.y += 1500;
 
-    camera.position = clickPos.clone().add(new BABYLON.Vector3(5, 1500, 1500));
+    camera.position = clickPos.clone().add(new BABYLON.Vector3(6, 1500, 1500));
 
     camera.setTarget(clickPos.add(new BABYLON.Vector3(0, 1500, 1500)));
     isLooking = true;
