@@ -1,13 +1,15 @@
 import {objectArray, idToIndexMap} from './main.js'
-import {mqtt_config, http_config} from "./config.js";
 import path from 'path-browserify'
+import config from '../public/json/tsconfig.json' assert {type: 'JSON'}
 
-var host = mqtt_config.host;  // MQTT服务器地址
-var port = mqtt_config.port;  // MQTT服务器端口
-var clientId = mqtt_config.clientId;  // 客户端ID
-var topic = mqtt_config.topic; //MQTT服务器订阅主题
+console.log(config);
 
-var url = http_config.url;
+var host = config.host;  // MQTT服务器地址
+var port = config.port;  // MQTT服务器端口
+var clientId = config.clientId;  // 客户端ID
+var topic = config.topic; //MQTT服务器订阅主题
+
+var url = config.url;
 
 var client = new Paho.MQTT.Client(host, port, clientId);
 
@@ -95,7 +97,7 @@ export function getPDF(labelName){
         return;
     }
 
-    let file_path = path.join(http_config.url, Manual);
+    let file_path = path.join(config.url, Manual);
     file_path = file_path.replace('http:/','http://');
     console.log(file_path);
     window.open(file_path, '_blank');

@@ -1,0 +1,7 @@
+{
+  "host": "broker.emqx.io",
+  "port": 8083,
+  "clientId": "yourClientId",
+  "topic": "test/topic",
+  "url": "http://localhost:3000/public"
+}
