@@ -12,13 +12,6 @@ home_btn.addEventListener('click', function (){
 })
 
 const display_btn = document.getElementById("display_btn");
-display_btn.addEventListener('click', function (){
-    if(!rightLabel.style.display){
-        rightLabel.style.display = "block";
-    }
-    rightLabel.classList.remove("right-slide-out");
-    rightLabel.classList.add("right-slide-in");
-})
 
 const play_btn = document.getElementById("play_btn");
 play_btn.addEventListener('click', function (){

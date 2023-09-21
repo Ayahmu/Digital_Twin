@@ -217,3 +217,7 @@ canvas{
   height: 100%;
 }
 
+#rightLabel{
+  display: none;
+}
+
