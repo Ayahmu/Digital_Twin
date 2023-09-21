@@ -3,5 +3,7 @@
   "port": 8083,
   "clientId": "yourClientId",
   "topic": "test/topic",
-  "url": "http://localhost:3000/public"
+  "url": "http://localhost:3000/public",
+  "camera_panningSensibility": 120,
+  "camera_wheelPrecision": 0.4
 }

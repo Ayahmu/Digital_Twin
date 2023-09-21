@@ -2,8 +2,6 @@ import {objectArray, idToIndexMap} from './main.js'
 import path from 'path-browserify'
 import config from '../public/json/tsconfig.json' assert {type: 'JSON'}
 
-console.log(config);
-
 var host = config.host;  // MQTT服务器地址
 var port = config.port;  // MQTT服务器端口
 var clientId = config.clientId;  // 客户端ID
@@ -97,7 +95,7 @@ export function getPDF(labelName){
         return;
     }
 
-    let file_path = path.join(config.url, Manual);
+    let file_path = path.join(url, Manual);
     file_path = file_path.replace('http:/','http://');
     console.log(file_path);
     window.open(file_path, '_blank');

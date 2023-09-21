@@ -5,15 +5,9 @@ import * as BABYLON from "babylonjs";
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
 import data from '../public/json/HydrogenSysInfo.json' assert {type: 'JSON'}
-import {getPDF, getJson} from "./connect.js";
-import {
-    back_btn,
-    home_btn,
-    display_btn,
-    play_btn,
-    info_btn,
-    close_btn
-} from './ui.js';
+import config from '../public/json/tsconfig.json' assert {type: 'JSON'}
+import {getJson, getPDF} from "./connect.js";
+import {back_btn, display_btn, home_btn, info_btn, play_btn} from './ui.js';
 
 //创建canvas
 const canvas = document.createElement("canvas");
@@ -23,7 +17,7 @@ canvas.height = window.innerHeight;
 //将canvas添加到body中
 document.body.appendChild(canvas);
 
-export let objectArray = null;
+export let objectArray;
 let doorAngle = [0,0,0];
 let idToDoor = {};
 idToDoor["Mesh.2971"] = 0;
@@ -94,8 +88,9 @@ const camera = new BABYLON.ArcRotateCamera(
     scene             // 相机所在场景
 );
 // 设置相机的灵敏度
-camera.panningSensibility = 120; // 增加平移灵敏度
-camera.wheelPrecision = 6;
+camera.panningSensibility = config.camera_panningSensibility; // 增加平移灵敏度
+camera.wheelPrecision = config.camera_wheelPrecision;
+camera.inertia = 0; //设置惯性为零
 
 camera.position = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483
     );
@@ -118,12 +113,12 @@ let models = []
 
 actionManager.registerAction(
     new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPickTrigger,//鼠标点击触发
+        BABYLON.ActionManager.OnPointerOverTrigger,//鼠标悬停触发
         function (event){
             switch (event.meshUnderPointer.id){
                 default:
                     removeLabel(rmLabelBuild);
-                    createLabel(event.meshUnderPointer,event.meshUnderPointer.id);
+                    highLight(event.meshUnderPointer,event.meshUnderPointer.id);
                     console.log(event.meshUnderPointer.id)
                     //moveCameraPosition(new BABYLON.Vector3(0,40,70));
                     break;
@@ -132,16 +127,57 @@ actionManager.registerAction(
     )
 )
 
+actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPointerOutTrigger, //鼠标移走触发
+        function (event){
+            switch (event.meshUnderPointer.id){
+                default:
+                    removeLabel(rmLabelBuild);
+                    break;
+            }
+        }
+    )
+);
+
+actionManager.registerAction(
+    new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnPickTrigger, //鼠标单机触发
+        function (event){
+            switch (event.meshUnderPointer.id){
+                default:
+                    displayLabel(event);
+                    break;
+            }
+        }
+    )
+);
+
+function displayLabel(event){
+    var rightLabel = document.getElementById("rightLabel");
+
+    var modelNameElm = document.getElementById("modelName");
+    modelNameElm.innerHTML = getJson(event.meshUnderPointer.id,'Name');
+
+    var modelInfoElm = document.getElementById("modelInfo");
+    modelInfoElm.innerHTML = getJson(event.meshUnderPointer.id,"Info");
+
+    if(!rightLabel.style.display){
+        rightLabel.style.display = "block";
+    }
+    rightLabel.classList.remove("right-slide-out");
+    rightLabel.classList.add("right-slide-in");
+}
+
 
 var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-let presentTextBlock;
 advancedTexture.renderScale = 1;
 
 let rmLabelBuild = [];
 let selectMesh, selectName;
 let clickPos;
 let basePosition = new BABYLON.Vector3(38.92868423461914,-0.002165344078093767,49.058162689208984); 
-function createLabel(mesh, labelName) {
+function highLight(mesh, labelName) {
 
     selectMesh = mesh;
     selectName = labelName;
@@ -154,12 +190,6 @@ function createLabel(mesh, labelName) {
         clickPos = pickInfo.pickedPoint;
         console.log("鼠标点击位置的世界坐标：", clickPos);
     }
-
-    var modelNameElm = document.getElementById("modelName");
-    modelNameElm.innerHTML = getJson(labelName,'Name');
-
-    var modelInfoElm = document.getElementById("modelInfo");
-    modelInfoElm.innerHTML = getJson(labelName,"Info");
 }
 
 let currentPosMesh, currentPosCamera, currentTargetCamera;
@@ -198,12 +228,10 @@ function resetMeshWithCamera(mesh)
 
 home_btn.addEventListener('click', function(){
 
-    var newRotation = new BABYLON.Vector3(0, 0, 0); 
-    camera.rotation = newRotation;
+    camera.rotation = new BABYLON.Vector3(0, 0, 0);
 
     camera.position = initPos;
     camera.setTarget(initTarget);
-    camera.inertia = 0;
     
     // if(selectMesh!=null)
     // {
@@ -262,7 +290,7 @@ function playAnimation(type)
 
     var newWindow = window.open('', '_blank', 'fullscreen=yes');   
     // 在新窗口中创建一个视频播放器
-    newWindow.document.write('<html><head><title>设备动画</title></head><body style="margin: 0; overflow: hidden;"><video src="' + video_url + '" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video></body></html>');
+    newWindow.document.write('<html lang="en"><head><title>设备动画</title></head><body style="margin: 0; overflow: hidden;"><video src="' + video_url + '" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video></body></html>');
 }
 
 play_btn.addEventListener('click', function(){
@@ -278,8 +306,6 @@ play_btn.addEventListener('click', function(){
     }
 
 })
-
-let selectUrl;
 
 info_btn.addEventListener('click', function (){
     getPDF(selectName);
