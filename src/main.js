@@ -120,6 +120,7 @@ actionManager.registerAction(
                     removeLabel(rmLabelBuild);
                     highLight(event.meshUnderPointer,event.meshUnderPointer.id);
                     console.log(event.meshUnderPointer.id)
+                    createLabel(event);
                     //moveCameraPosition(new BABYLON.Vector3(0,40,70));
                     break;
             }
@@ -142,11 +143,18 @@ actionManager.registerAction(
 
 actionManager.registerAction(
     new BABYLON.ExecuteCodeAction(
-        BABYLON.ActionManager.OnPickTrigger, //鼠标单机触发
+        BABYLON.ActionManager.OnPickTrigger, //鼠标单击触发
         function (event){
             switch (event.meshUnderPointer.id){
                 default:
                     displayLabel(event);
+                    var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
+
+                    if (pickInfo.hit) {
+                        // 鼠标点击位置的世界坐标
+                        clickPos = pickInfo.pickedPoint;
+                        console.log("鼠标点击位置的世界坐标：", clickPos);
+                    }
                     break;
             }
         }
@@ -167,13 +175,33 @@ function displayLabel(event){
     }
     rightLabel.classList.remove("right-slide-out");
     rightLabel.classList.add("right-slide-in");
+
 }
 
+let rmLabelBuild = []
+
+function createLabel(event){
+    var label = new GUI.Rectangle();
+    label.background = "rgba(0, 0, 0, 1)";
+    label.height = "60px";
+    label.alpha = 0.6;
+    label.width = "200px";
+    label.cornerRadius = 20;
+    label.thickness = 1;
+    label.linkOffsetY = -100;
+    advancedTexture.addControl(label);
+    label.linkWithMesh(event.meshUnderPointer);
+    var text1 = new GUI.TextBlock();
+    text1.text = getJson(event.meshUnderPointer.id,"Name");
+    text1.color = "white";
+    label.addControl(text1);
+    rmLabelBuild.push(label);
+    rmLabelBuild.push(text1);
+}
 
 var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
 
-let rmLabelBuild = [];
 let selectMesh, selectName;
 let clickPos;
 let basePosition = new BABYLON.Vector3(38.92868423461914,-0.002165344078093767,49.058162689208984); 
@@ -183,13 +211,6 @@ function highLight(mesh, labelName) {
     selectName = labelName;
     highLightLayer.addMesh(mesh,BABYLON.Color3.Blue());
     models.push(mesh);
-    var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
-
-    if (pickInfo.hit) {
-        // 鼠标点击位置的世界坐标
-        clickPos = pickInfo.pickedPoint;
-        console.log("鼠标点击位置的世界坐标：", clickPos);
-    }
 }
 
 let currentPosMesh, currentPosCamera, currentTargetCamera;
