@@ -90,7 +90,7 @@ const camera = new BABYLON.ArcRotateCamera(
 // 设置相机的灵敏度
 camera.panningSensibility = config.camera_panningSensibility; // 增加平移灵敏度
 camera.wheelPrecision = config.camera_wheelPrecision;
-camera.inertia = 0; //设置惯性为零
+camera.inertia = 0; //设置为0以禁用移动和旋转的惯性
 
 camera.position = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483
     );
@@ -328,7 +328,7 @@ function removeLabel(arr) {
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "modelv2.gltf",
+    "modelv6d.gltf",
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
