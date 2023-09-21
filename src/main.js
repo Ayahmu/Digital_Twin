@@ -79,7 +79,7 @@ const scene = new BABYLON.Scene(engine,false);
 var hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/env3.hdr", scene, 1024);
 scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
-scene.environmentIntensity = 0.2;
+scene.environmentIntensity = 0.4;
 
 let initTarget = new BABYLON.Vector3(-37.95875211948178, 73.00066611807962, 64.42490800253104); // 相机目标点
 let initPos = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483);
@@ -283,6 +283,7 @@ let selectUrl;
 
 info_btn.addEventListener('click', function (){
     getPDF(selectName);
+
 });
 
 function removeLabel(arr) {
