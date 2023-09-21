@@ -76,10 +76,10 @@ const engine = new BABYLON.Engine(canvas,true,{stencil:true});
 //创建场景
 const scene = new BABYLON.Scene(engine,false);
 // const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("texture/hdr/environment.env", scene);
-var hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/environment.hdr", scene, 512);
+var hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/env3.hdr", scene, 1024);
 scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
-scene.environmentIntensity = 1;
+scene.environmentIntensity = 0.2;
 
 let initTarget = new BABYLON.Vector3(-37.95875211948178, 73.00066611807962, 64.42490800253104); // 相机目标点
 let initPos = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483);
@@ -161,164 +161,6 @@ function createLabel(mesh, labelName) {
     var modelInfoElm = document.getElementById("modelInfo");
     modelInfoElm.innerHTML = getJson(labelName,"Info");
 }
-// var sv = new GUI.ScrollViewer();
-// var tb = new GUI.TextBlock();
-// function createScrollView()
-// {
-//     // 创建一个滚动面板，用于容纳文本和支持滚动
-//     sv.thickness = 4;
-//     sv.color = "white";
-//     sv.width = "320px";
-//     sv.height = "520px";
-//     sv.background = "black";
-//     sv.cornerRadius = 5;
-//     sv.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-//     sv.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     sv.paddingRightInPixels = 10;
-//     advancedTexture.addControl(sv);
-
-//     tb.textWrapping = GUI.TextWrapping.WordWrap;
-//     tb.resizeToFit = true;
-//     tb.paddingTop = "5%";
-//     tb.paddingLeft = "30px";
-//     tb.paddingRight = "20px"
-//     tb.paddingBottom = "5%";
-//     tb.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-//     tb.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-//     tb.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-//     tb.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-//     tb.color = "white";
-
-//     tb.text = "text\n".repeat(100);
-
-//     tb.fontSize = "24px";
-
-//     sv.addControl(tb);
-
-// }
-
-// createScrollView();
-
-
-// function createButtons()
-// {
-//     var label = new GUI.Grid();
-//     label.addColumnDefinition(20);  // 第一部分占百分之十五
-//     label.addColumnDefinition(20);  // 第三部分占百分之七十
-//     label.addColumnDefinition(20);  // 第二部分占百分之十五
-//     label.addColumnDefinition(20);
-//     label.addColumnDefinition(20);
-//     label.background = "rgba(0.3, 0.3, 0.7, 0.5)";
-//     label.height = "50px";
-//     label.width = "460px";
-//     label.cornerRadius = 20;
-//     label.thickness = 1;
-//     label.linkOffsetY = -100;
-//     label.isPointerBlocker = false; // 允许鼠标事件穿透
-//     label.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-//     label.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-    
-//     var part0 = GUI.Button.CreateSimpleButton("button1", " 1");
-//     part0.width = "18px";
-//     part0.height = "18px";
-//     part0.background = "black";
-//     part0.color = "white";
-//     part0.isPointerBlocker = true;
-//     part0.cornerRadius = 4;
-//     part0.textBlock.fontSize = 12;
-//     part0.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     part0.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-//     part0.onPointerClickObservable.add(function() {
-//         // 添加按钮1的点击事件处理
-//         console.log("关闭");
-//         //使用removeLabel可以同时移除高光
-//         removeLabel(rmLabelBuild);
-//         //label.isVisible = false;
-//     });
-//     label.addControl(part0, 0, 0);
-
-//     var part1 = GUI.Button.CreateSimpleButton("button1", " 2");
-//     part1.width = "18px";
-//     part1.height = "18px";
-//     part1.background = "black";
-//     part1.color = "white";
-//     part1.isPointerBlocker = true;
-//     part1.cornerRadius = 4;
-//     part1.textBlock.fontSize = 12;
-//     part1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     part1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-//     part1.onPointerClickObservable.add(function() {
-//         // 添加按钮1的点击事件处理
-//         console.log("关闭");
-//         //使用removeLabel可以同时移除高光
-//         removeLabel(rmLabelBuild);
-//         //label.isVisible = false;
-//     });
-//     label.addControl(part1, 0, 1);
-
-//     var part2 = GUI.Button.CreateSimpleButton("button1", " 3");
-//     part2.width = "18px";
-//     part2.height = "18px";
-//     part2.background = "black";
-//     part2.color = "white";
-//     part2.isPointerBlocker = true;
-//     part2.cornerRadius = 4;
-//     part2.textBlock.fontSize = 12;
-//     part2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     part2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-//     part2.onPointerClickObservable.add(function() {
-//         // 添加按钮1的点击事件处理
-//         console.log("关闭");
-//         //使用removeLabel可以同时移除高光
-//         removeLabel(rmLabelBuild);
-//         //label.isVisible = false;
-//     });
-//     label.addControl(part2, 0, 2);
-
-//     var part3 = GUI.Button.CreateSimpleButton("button1", " 4");
-//     part3.width = "18px";
-//     part3.height = "18px";
-//     part3.background = "black";
-//     part3.color = "white";
-//     part3.isPointerBlocker = true;
-//     part3.cornerRadius = 4;
-//     part3.textBlock.fontSize = 12;
-//     part3.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     part3.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-//     part3.onPointerClickObservable.add(function() {
-//         // 添加按钮1的点击事件处理
-//         console.log("关闭");
-//         //使用removeLabel可以同时移除高光
-//         removeLabel(rmLabelBuild);
-//         //label.isVisible = false;
-//     });
-//     label.addControl(part3, 0, 3);
-
-//     var part4 = GUI.Button.CreateSimpleButton("button1", " 5");
-//     part4.width = "18px";
-//     part4.height = "18px";
-//     part4.background = "black";
-//     part4.color = "white";
-//     part4.isPointerBlocker = true;
-//     part4.cornerRadius = 4;
-//     part4.textBlock.fontSize = 12;
-//     part4.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-//     part4.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-//     part4.onPointerClickObservable.add(function() {
-//         // 添加按钮1的点击事件处理
-//         console.log("关闭");
-//         //使用removeLabel可以同时移除高光
-//         removeLabel(rmLabelBuild);
-//         //label.isVisible = false;
-//     });
-//     label.addControl(part4, 0, 4);
-
-
-//     advancedTexture.addControl(label);
-
-// }
-
-// createButtons();
 
 let currentPosMesh, currentPosCamera, currentTargetCamera;
 let targetPosCamera, targetPosMesh;
@@ -420,7 +262,7 @@ function playAnimation(type)
 
     var newWindow = window.open('', '_blank', 'fullscreen=yes');   
     // 在新窗口中创建一个视频播放器
-    newWindow.document.write('<html><head><title>全屏视频播放器</title></head><body style="margin: 0; overflow: hidden;"><video src="' + video_url + '" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video></body></html>');
+    newWindow.document.write('<html><head><title>设备动画</title></head><body style="margin: 0; overflow: hidden;"><video src="' + video_url + '" controls autoplay style="width: 100%; height: 100%; object-fit: cover;"></video></body></html>');
 }
 
 play_btn.addEventListener('click', function(){
