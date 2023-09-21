@@ -303,7 +303,7 @@ function removeLabel(arr) {
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "modelv4.gltf",
+    "modelv6d.gltf",
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
