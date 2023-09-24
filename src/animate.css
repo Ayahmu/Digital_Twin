@@ -44,3 +44,22 @@
     animation-timing-function: ease;
     animation-fill-mode: forwards;
 }
+
+/*报警图标动画*/
+@keyframes keyframes-fill {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        transform: rotate(25deg);
+    }
+
+    50% {
+        transform: rotate(-20deg) scale(1.2);
+    }
+
+    75% {
+        transform: rotate(15deg);
+    }
+}

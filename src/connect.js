@@ -1,4 +1,4 @@
-import {objectArray, idToIndexMap} from './main.js'
+import {objectArray, idToIndexMap, createWarningMessage, deleteWarningMessage} from './main.js'
 import path from 'path-browserify'
 import {mqtt_config, http_config} from "./config.js";
 
@@ -43,7 +43,28 @@ function onConnectFailure(errorMessage) {
 //接收消息
 client.onMessageArrived = function (message){
     console.log('收到消息:', message.destinationName, message.payloadString);
+    if(!warningMessageArray.has(message.payloadString)){
+        createWarningMessage(message.payloadString);
+    }
+    //存入模型id与计时器,存在覆盖
+    warningMessageArray.set(message.payloadString, 0);
 };
+
+
+let warningMessageArray = new Map();
+
+setInterval(function() {
+    for (let [key, value] of warningMessageArray) {
+        console.log(value);
+        if (value >= 5) {
+            deleteWarningMessage(key);
+            warningMessageArray.delete(key);
+            break;
+        }
+        value++;
+        warningMessageArray.set(key, value);
+    }
+}, 1000);
 
 //订阅主题成功回调函数
 function onSubscribe(){

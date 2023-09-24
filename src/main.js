@@ -152,7 +152,8 @@ actionManager.registerAction(
                     if (pickInfo.hit) {
                         // 鼠标点击位置的世界坐标
                         clickPos = pickInfo.pickedPoint;
-                        console.log("鼠标点击位置的世界坐标：", clickPos);
+                        console.log("鼠标点击位置的世界坐标:", clickPos);
+                        console.log("点击模型世界坐标:", event.meshUnderPointer.position)
                     }
                     break;
             }
@@ -194,6 +195,31 @@ function createLabel(event){
     text1.text = getJson(event.meshUnderPointer.id,"Name");
     text1.color = "white";
     label.addControl(text1);
+    rmLabelBuild.push(label);
+    rmLabelBuild.push(text1);
+}
+
+function createWarningLabel(modelID,model){
+    for(let label of rmLabelBuild){
+        if(label.name === modelID){
+            return;
+        }
+    }
+    let label = new GUI.Rectangle(modelID);
+    label.background = "rgba(0, 0, 0, 1)";
+    label.alpha = 0.6;
+    label.cornerRadius = 20;
+    label.thickness = 1;
+    label.linkOffsetY = -100;
+    label.width = "500px";
+    label.height = "300px";
+    advancedTexture.addControl(label);
+    label.linkWithMesh(model);
+    var text1 = new GUI.TextBlock();
+    text1.text = "报警信息名称:"+getJson(modelID,"Name")  +"\n"+ "报警信息报警信息报警信息报警信息报警信息报警信息";
+    text1.color = "white";
+    label.addControl(text1);
+
     rmLabelBuild.push(label);
     rmLabelBuild.push(text1);
 }
@@ -297,7 +323,67 @@ scene.onPointerObservable.add((pointerInfo) => {
     }
 });
 
+//报警设备Map,便于图标跟随
+let warningModels = new Map();
+
+export function createWarningMessage(modelID){
+    var warningModel = scene.getMeshById(modelID);
+
+    //生成报警图标
+    var bellElement = document.getElementById("bell")
+    var clonedIcon = bellElement.cloneNode(true);
+    //标签id为模型id
+    clonedIcon.id = modelID;
+    bellElement.parentNode.appendChild(clonedIcon);
+
+    //设置报警的必要样式
+    clonedIcon.style.display = 'block';
+    clonedIcon.style.position = 'absolute';
+    clonedIcon.style.zIndex = 2;
+
+    //报警图标对应模型
+    warningModels.set(clonedIcon, warningModel)
+
+    //取消默认点击事件
+    var inputElement = clonedIcon.querySelector("input");
+    inputElement.addEventListener("click", function(event){
+        event.preventDefault();
+    });
+    inputElement.addEventListener("click", function(){
+        createWarningLabel(modelID,warningModel);
+    });
+}
+
+export function deleteWarningMessage(modelID){
+    let warningElement = document.getElementById(modelID);
+    warningModels.delete(warningElement);
+    warningElement.remove();
+    removeLabel(rmLabelBuild);
+}
+
+
+var renderWidth = engine.getRenderingCanvas().width;
+var renderHeight = engine.getRenderingCanvas().height;
+var viewport = scene.activeCamera.viewport;
+viewport.toGlobal(renderWidth, renderHeight);
+var worldMatrix = scene.getTransformMatrix();
+function setWarningPosition(warningModels){
+    warningModels.forEach(function (value, key){
+        var modelPosition = value.getAbsolutePosition();
+        const transformMatrix = BABYLON.Matrix.Identity();
+        transformMatrix.multiply(worldMatrix);
+        var screenPosition = BABYLON.Vector3.Project(modelPosition, transformMatrix, scene.getTransformMatrix(), viewport);
+
+        key.style.top = screenPosition.y * 100 + "%"
+        key.style.left = screenPosition.x * 100 + "%"
+
+    });
+}
+
+
 scene.registerBeforeRender(function(){
+
+    setWarningPosition(warningModels);
 
     //计算帧率
     var fps = engine.getFps().toFixed();
