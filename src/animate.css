@@ -4,14 +4,14 @@
         transform: translateX(100%);
     }
     100%{
-        opacity: 0.5;
+        opacity: 1;
         transform: translateX(0);
     }
 }
 
 @keyframes right-slide-out {
     0%{
-        opacity: 0.5;
+        opacity: 1;
         transform: translateX(0);
     }
     100%{
