@@ -11,29 +11,16 @@
     user-select: none;
 }
 
-.container .bell-regular {
-    position: absolute;
-    animation: keyframes-fill .5s;
-    fill: #a5a5b0;
-}
-
 .container .bell-solid {
     position: absolute;
     display: none;
     animation: keyframes-fill .5s;
+    animation-iteration-count: infinite;
     fill: crimson;
 }
 
-.container .bell-warning {
-    position: absolute;
-    display: none;
-    fill: crimson;
-}
 
 /* ------ On check event ------ */
-.container input:checked ~ .bell-regular {
-    display: none;
-}
 
 .container input:checked ~ .bell-solid {
     display: block;

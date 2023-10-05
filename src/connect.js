@@ -1,6 +1,7 @@
 import {objectArray, idToIndexMap, createWarningMessage, deleteWarningMessage} from './main.js'
 import path from 'path-browserify'
 import {mqtt_config, http_config} from "./config.js";
+import {back_btn} from "./ui.js";
 
 var host = mqtt_config.host;  // MQTT服务器地址
 var port = mqtt_config.port;  // MQTT服务器端口
@@ -40,16 +41,26 @@ function onConnectFailure(errorMessage) {
     console.error(`Failed to connect to ${host}: ` + errorMessage.errorMessage);
 }
 
+client.onConnectionLost = function (message){
+    console.log('连接丢失',message);
+    console.log('正在尝试重新连接...');
+    setTimeout(()=>{
+        client.connect(connect_options);
+    },1000);
+}
+
 //接收消息
 client.onMessageArrived = function (message){
     console.log('收到消息:', message.destinationName, message.payloadString);
-    if(!warningMessageArray.has(message.payloadString)){
-        createWarningMessage(message.payloadString);
+    let messageJSON = JSON.parse(message.payloadString);
+    let modelID = messageJSON.id;
+    let url = messageJSON.url;
+    if(!warningMessageArray.has(modelID)){
+        createWarningMessage(modelID, url);
     }
     //存入模型id与计时器,存在覆盖
-    warningMessageArray.set(message.payloadString, 0);
+    warningMessageArray.set(modelID, 0);
 };
-
 
 let warningMessageArray = new Map();
 
@@ -119,4 +130,9 @@ export function getPDF(labelName){
         console.log(file_path);
         window.open(file_path, '_blank');
     }
+}
+
+back_btn.onclick = function (){
+    const message = {id: "Mesh.1449", url: "http://www.baidu.com"};
+    client.send("test/topic",JSON.stringify(message),0,false);
 }

@@ -92,7 +92,7 @@ camera.wheelPrecision = 1 / camera_config.camera_wheelPrecision;
 camera.inertia = 0; //设置为0以禁用移动和旋转的惯性
 
 camera.position = new BABYLON.Vector3(-37.99717668174966, 86.58864238456036, 333.38193590224483
-    );
+);
 
 //将相机附加到画布上,
 camera.attachControl(canvas);
@@ -120,7 +120,6 @@ actionManager.registerAction(
                     highLight(event.meshUnderPointer,event.meshUnderPointer.id);
                     console.log(event.meshUnderPointer.id)
                     createLabel(event);
-                    //moveCameraPosition(new BABYLON.Vector3(0,40,70));
                     break;
             }
         }
@@ -199,30 +198,30 @@ function createLabel(event){
     rmLabelBuild.push(text1);
 }
 
-function createWarningLabel(modelID,model){
-    for(let label of rmLabelBuild){
-        if(label.name === modelID){
-            return;
-        }
-    }
-    let label = new GUI.Rectangle(modelID);
-    label.background = "rgba(0, 0, 0, 1)";
-    label.alpha = 0.6;
-    label.cornerRadius = 20;
-    label.thickness = 1;
-    label.linkOffsetY = -100;
-    label.width = "500px";
-    label.height = "300px";
-    advancedTexture.addControl(label);
-    label.linkWithMesh(model);
-    var text1 = new GUI.TextBlock();
-    text1.text = "报警信息名称:"+getJson(modelID,"Name")  +"\n"+ "报警信息报警信息报警信息报警信息报警信息报警信息";
-    text1.color = "white";
-    label.addControl(text1);
-
-    rmLabelBuild.push(label);
-    rmLabelBuild.push(text1);
-}
+// function createWarningLabel(modelID,model){
+//     for(let label of rmLabelBuild){
+//         if(label.name === modelID){
+//             return;
+//         }
+//     }
+//     let label = new GUI.Rectangle(modelID);
+//     label.background = "rgba(0, 0, 0, 1)";
+//     label.alpha = 0.6;
+//     label.cornerRadius = 20;
+//     label.thickness = 1;
+//     label.linkOffsetY = -100;
+//     label.width = "500px";
+//     label.height = "300px";
+//     advancedTexture.addControl(label);
+//     label.linkWithMesh(model);
+//     var text1 = new GUI.TextBlock();
+//     text1.text = "报警信息名称:"+getJson(modelID,"Name")  +"\n"+ "报警信息报警信息报警信息报警信息报警信息报警信息";
+//     text1.color = "white";
+//     label.addControl(text1);
+//
+//     rmLabelBuild.push(label);
+//     rmLabelBuild.push(text1);
+// }
 
 var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
@@ -287,10 +286,11 @@ function removeLabel(arr) {
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "modelv6d.gltf",
+    "modelv7d.gltf",
     scene,
     function (Meshes) {
         var importedMesh = Meshes[0];
+        console.log(Meshes);
         importedMesh.getChildren().forEach(function (mesh){
             //仅为json文件中存在的设备绑定事件
             if(getJson(mesh.id) !== '暂无设备信息'){
@@ -326,7 +326,7 @@ scene.onPointerObservable.add((pointerInfo) => {
 //报警设备Map,便于图标跟随
 let warningModels = new Map();
 
-export function createWarningMessage(modelID){
+export function createWarningMessage(modelID,url){
     var warningModel = scene.getMeshById(modelID);
 
     //生成报警图标
@@ -350,7 +350,11 @@ export function createWarningMessage(modelID){
         event.preventDefault();
     });
     inputElement.addEventListener("click", function(){
-        createWarningLabel(modelID,warningModel);
+        // createWarningLabel(modelID,warningModel);
+        window.open(url,"_blank")
+    });
+    clonedIcon.addEventListener("mouseover", function (){
+        //createLabel();
     });
 }
 

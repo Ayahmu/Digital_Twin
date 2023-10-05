@@ -2,7 +2,7 @@ import {page_config} from "./config.js";
 
 const back_btn = document.getElementById("back_btn");
 back_btn.addEventListener('click', function (){
-    window.open(page_config.url, '_blank');
+    // window.open(page_config.url, '_blank');
 })
 
 const home_btn = document.getElementById("home_btn");

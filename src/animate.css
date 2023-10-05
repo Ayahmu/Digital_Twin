@@ -20,18 +20,6 @@
     }
 }
 
-.left-slide-in {
-    animation-name: left-slide-in;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-fill-mode: forwards;
-}
-.left-slide-out {
-    animation-name: left-slide-out;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    animation-fill-mode: forwards;
-}
 .right-slide-in {
     animation-name: right-slide-in;
     animation-duration: 1s;
@@ -48,7 +36,7 @@
 /*报警图标动画*/
 @keyframes keyframes-fill {
     0% {
-        opacity: 0;
+        /*opacity: 0;*/
     }
 
     25% {

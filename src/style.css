@@ -34,7 +34,7 @@ canvas{
 
 .button{
   right: -70%;
-  top: 40%;
+  top: -30%;
   visibility: hidden;
   position: relative;
   width: 10px;
@@ -52,14 +52,14 @@ canvas{
 #time{
   position: relative;
   right: -75%;
-  top: 30%;
+  top: -50%;
   z-index: 2;
   color: #0efcff;
 }
 
 .nav {
   position: relative;
-  top: .5vw;
+  top: -2%;
   width: 100%;
   height: 5vw;
   background: url(../public/img/top.png) no-repeat;
