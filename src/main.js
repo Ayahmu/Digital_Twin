@@ -4,9 +4,10 @@ import * as BABYLON from "babylonjs";
 //导入gltf加载器
 import "babylonjs-loaders";
 import * as GUI from "babylonjs-gui";
-import data from '../public/json/HydrogenSysInfo.json' assert {type: 'JSON'}
+import data1 from '../public/json/HydrogenSysInfo.json' assert {type: 'JSON'}
+import data2 from '../public/json/pipe.json' assert {type: 'JSON'}
 import {camera_config} from './config.js';
-import {getJson} from "./connect.js";
+import {getJson,getPipeJson} from "./connect.js";
 import {home_btn} from './ui.js';
 
 //创建canvas
@@ -18,6 +19,7 @@ canvas.height = window.innerHeight;
 document.body.appendChild(canvas);
 
 export let objectArray;
+export let pipeArray;
 let idToDoor = {};
 idToDoor["Mesh.2971"] = 0;
 idToDoor["Mesh.1898"] = 1;
@@ -35,7 +37,16 @@ function MyObject(ID, Name, Info, Manual, Url, LocID, Animation) {
 
 
 // 创建对象实例并存储在数组中
-objectArray = data.map(jsonObject => new MyObject(
+objectArray = data1.map(jsonObject => new MyObject(
+    jsonObject.ID,
+    jsonObject.Name,
+    jsonObject.Info,
+    jsonObject.Manual,
+    jsonObject.Url,
+    jsonObject.LocID,
+    jsonObject.Animation
+));
+pipeArray = data2.map(jsonObject => new MyObject(
     jsonObject.ID,
     jsonObject.Name,
     jsonObject.Info,
@@ -47,18 +58,22 @@ objectArray = data.map(jsonObject => new MyObject(
 
 
 // 创建一个哈希表，将 ID 映射到数组索引
-export const idToIndexMap = {};
+export const idToIndexMap1 = {};
+export const idToIndexMap2 = {};
 
 // 填充哈希表
 objectArray.forEach((obj, index) => {
-    idToIndexMap[obj.ID] = index;
+    idToIndexMap1[obj.ID] = index;
+});
+pipeArray.forEach((obj, index) => {
+    idToIndexMap2[obj.ID] = index;
 });
 
 // 要查找的特定 ID
 const targetID = "10QM001"; // 例如，查找 ID 为 "10QM001" 的对象
 
 // 使用哈希表查找特定 ID 对应的数组索引
-let targetIndex = idToIndexMap[targetID];
+let targetIndex = idToIndexMap1[targetID];
 
 console.log("10QM001", objectArray[targetIndex]);
 
@@ -283,17 +298,272 @@ function removeLabel(arr) {
     models = [];
     rmLabelBuild = [];
 }
+function changematerial(){
+        // 管道透明
+        //氢气管道
+        let pipe1=scene.getMeshById("Brep.044");
+        let pipe2=scene.getMeshById("Brep.008");
+        let hydrogenmaterial = new BABYLON.PBRMaterial("hydrogenmaterial", scene) //创建pbr 氢气管道材料
+        hydrogenmaterial.albedoColor=new BABYLON.Color3.Green(); // 反射颜色
+        hydrogenmaterial.metallic=1 // 金属
+        hydrogenmaterial.roughness=0.5 // 粗糙
+        hydrogenmaterial.alpha=0.3;
+        pipe1.material = hydrogenmaterial;
+        pipe2.material = hydrogenmaterial;
+        //二氧化碳管道
+        let pipe3=scene.getMeshById("Brep.007")
+        let pipe4=scene.getMeshById("Brep.010")
+        let carbonmaterial= new BABYLON.PBRMaterial("carbonmaterial", scene) //创建pbr 二氧化碳管道材料
+        carbonmaterial.albedoColor=new BABYLON.Color3.Purple(); // 反射颜色
+        carbonmaterial.metallic=0.5 // 金属
+        carbonmaterial.roughness=0.5 // 粗糙
+        carbonmaterial.alpha=0.3;
+        pipe3.material = carbonmaterial;
+        pipe4.material = carbonmaterial;
+        //隔板材质
+        let clapboard1=scene.getMeshById("Brep");
+        let clapboard2=scene.getMeshById("Brep.091");
+        let clapboard3=scene.getMeshById("Brep.092");
+        let myclapboardMaterial=new BABYLON.PBRMaterial("myclapboardMaterial", scene)
+        myclapboardMaterial.albedoColor=new BABYLON.Color3.White(); // 反射颜色
+        myclapboardMaterial.metallic=0.2 // 金属
+        myclapboardMaterial.roughness=0.8 // 粗糙
+        myclapboardMaterial.alpha=1;
+        clapboard1.material = myclapboardMaterial;
+        clapboard2.material = myclapboardMaterial;
+        clapboard3.material = myclapboardMaterial;
+}
+//flowing流动方案-粒子效果
+let countnum=1;
+function makeparticle(mesh,particleSystem,color1,color2,colorDead){
+    countnum++;
+    //Texture of each particle
+    particleSystem.particleTexture = new BABYLON.Texture("/texture/flare.png", scene);
+    // Where the particles come from
+    particleSystem.emitter = mesh;//设置emitter发射器
+    // Colors of all particles
+    particleSystem.color1 = color1;
+    particleSystem.color2 = color2;
+    particleSystem.colorDead = colorDead;
+    // Size of each particle (random between...
+    particleSystem.minSize = 0.3;
+    particleSystem.maxSize = 0.5;
+    // Life time of each particle (random between...
+    particleSystem.minLifeTime = 2;
+    particleSystem.maxLifeTime = 3;
+    particleSystem.minEmitBox = new BABYLON.Vector3(0.08, 0.08, 0.08); //控制盒子
+    particleSystem.maxEmitBox = new BABYLON.Vector3(-0.08, -0.08, -0.08);
+    // Emission rate
+    particleSystem.emitRate = 1000;
+    // Speed
+    particleSystem.minEmitPower = 0.1;
+    particleSystem.maxEmitPower = 0.3;
+    particleSystem.updateSpeed = 0.005;
+}
+const slide = function (dist,movdirection) { //after covering dist apply turn
+    this.dist = dist;
+    this.movdirection=movdirection;//正在沿movaxis移动
+}
+function moveparticle(track,mesh,x,y,z,time){
+    setTimeout(function(){
+        let distance = 0;
+        let step = 0.8;
+        let p = 0;
+        scene.onBeforeRenderObservable.add(() => {
+            if(track[p].movdirection==="left"){
+                mesh.movePOV(-step, 0, 0);
+            }
+            if(track[p].movdirection==="right"){
+                mesh.movePOV(step, 0, 0);
+            }
+            if(track[p].movdirection==="up"){
+                mesh.movePOV(0, step, 0);
+            }
+            if(track[p].movdirection==="down"){
+                mesh.movePOV(0, -step, 0);
+            }
+            if(track[p].movdirection==="front"){
+                mesh.movePOV(0, 0, step);
+            }
+            if(track[p].movdirection==="behind"){
+                mesh.movePOV(0, 0, -step);
+            }
 
+            distance += step;
+            if (distance > track[p].dist) {        
+                // sphere.rotate(track044[p].rotaxis, track044[p].turn, BABYLON.Space.LOCAL);
+                // particleSystem.gravity = track044[p].gravity;
+                p +=1;
+                p %= track.length;
+                if (p === 0) {
+                    distance = 0;
+                    mesh.position = new BABYLON.Vector3(x, y, z); //reset to initial conditions
+                    // sphere.rotation = BABYLON.Vector3.Zero();//prevents error accumulation
+                }
+            }
+        });
+    },time);
+    
+}
+//发射器们：
+let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:0.01, segments: 8}, scene);
+// sphere.material = new BABYLON.StandardMaterial("mat", scene);
+// sphere.material.wireframe = true;
+sphere.position=new BABYLON.Vector3(51, 25, 91);
+let sphere004cl1=sphere.clone("sphere004cl1");
+sphere004cl1.position=new BABYLON.Vector3(51, 25, 91);
+var sphere008=sphere.clone("sphere008");
+sphere008.position=new BABYLON.Vector3(3.5, 27.8, 71.8);
+var sphere008cl1=sphere008.clone("sphere008cl1");
+var sphere049=sphere.clone("sphere008");
+sphere049.position=new BABYLON.Vector3(-8, 9.57, 79.6);
+var sphere049cl1=sphere049.clone("sphere049cl1");
+var sphere053=sphere.clone("sphere053");
+sphere053.position=new BABYLON.Vector3(25.3, 27.6, 61.4);
+var sphere053cl1=sphere053.clone("sphere053cl1");
+var sphere053cl2=sphere053.clone("sphere053cl2");
+var sphere053cl3=sphere053.clone("sphere053cl3");
+
+// var sphere053cl6=sphere053.clone("sphere053cl6");
+
+
+const track044 = [];//管道Brep.044的轨迹
+track044.push(new slide(5.8,"up"));  //first side length 6
+track044.push(new slide(5.8+1,"front")); //at finish of second side distance covered is 18+9
+track044.push(new slide(5.8+1+14.5,"right")); //at finish of second side distance covered is 18+9
+track044.push(new slide(5.8+1+14.5+28,"front")); //at finish of second side distance covered is 18+9
+track044.push(new slide(5.8+1+14.5+28+6,"right")); //at finish of second side distance covered is 18+9
+track044.push(new slide(5.8+1+14.5+28+6+3.3,"down")); //最后一条
+//all sides cover
+
+
+//创建一个绿色的粒子系统
+let particleSystem1=new BABYLON.ParticleSystem("particles1",10000,scene);//自动给每个粒子系统编号
+makeparticle(sphere,particleSystem1,
+    new BABYLON.Color4(0.04, 0.63, 0.02),
+    new BABYLON.Color4(0.14, 0.74, 0.09),
+    new BABYLON.Color4(0.13, 0.55, 0.13, 0.8));
+moveparticle(track044,sphere,51, 25, 91, 0);
+
+let particleSystem2=new BABYLON.ParticleSystem("particles2",10000,scene);//自动给每个粒子系统编号
+//创建一个绿色的粒子系统
+makeparticle(sphere004cl1,particleSystem2,
+    new BABYLON.Color4(0.04, 0.63, 0.02),
+    new BABYLON.Color4(0.14, 0.74, 0.09),
+    new BABYLON.Color4(0.13, 0.55, 0.13, 0.8));
+moveparticle(track044,sphere004cl1,51, 25, 91,7500);//间隔时间
+
+const track008 = [];//管道Brep.008的轨迹
+track008.push(new slide(3.4,"up"));  //first side length 6
+track008.push(new slide(3.4+16.5,"behind")); //at finish of second side distance covered is 18+9
+track008.push(new slide(3.4+16.5+0.2,"down")); //at finish of second side distance covered is 18+9
+track008.push(new slide(3.4+16.5+0.2+27.1,"left")); //at finish of second side distance covered is 18+9
+track008.push(new slide(3.4+16.5+0.2+27.1+18.3,"front")); //at finish of second side distance covered is 18+9
+track008.push(new slide(3.4+16.5+0.2+27.1+18.3+3.5,"down")); //最后一条共70.3
+
+var particleSystem3=new BABYLON.ParticleSystem(`particles3`,10000,scene);//自动给每个粒子系统编号
+var particleSystem4=new BABYLON.ParticleSystem(`particles4`,10000,scene);//自动给每个粒子系统编号
+//创建一个绿色的粒子系统
+makeparticle(sphere008,particleSystem3,
+    new BABYLON.Color4(0.17, 0.97, 0.02),
+    new BABYLON.Color4(0.6, 0.93, 0.57),
+    new BABYLON.Color4(0, 0.2, 0, 0.8));
+moveparticle(track008,sphere008,3.5, 27.8, 71.8,0);
+makeparticle(sphere008cl1,particleSystem4,
+    new BABYLON.Color4(0.17, 0.97, 0.02),
+    new BABYLON.Color4(0.6, 0.93, 0.57),
+    new BABYLON.Color4(0, 0.2, 0, 0.8));
+moveparticle(track008,sphere008cl1,3.5, 27.8, 71.8,8000);
+const track049 = [];//管道Brep.049的轨迹
+track049.push(new slide(4.3,"right"));  //first side length 6
+track049.push(new slide(4.3+22,"up")); //at finish of second side distance covered is 18+9
+track049.push(new slide(4.3+22+10.2,"behind")); //at finish of second side distance covered is 18+9
+// track049.push(new slide(4.3+22+10.2+0,"down")); //at finish of second side distance covered is 18+9
+track049.push(new slide(4.3+22+10.2+0+46,"left")); //at finish of second side distance covered is 18+9
+track049.push(new slide(4.3+22+10.2+0+46+23.3,"front")); 
+track049.push(new slide(4.3+22+10.2+0+46+23.3+2.5,"right")); 
+track049.push(new slide(4.3+22+10.2+0+46+23.3+2.5+3.5,"down")); //最后一条共70.3
+
+var particleSystem5=new BABYLON.ParticleSystem(`particles5`,10000,scene);
+var particleSystem6=new BABYLON.ParticleSystem(`particles6`,10000,scene);
+//创建一个紫色的粒子系统
+makeparticle(sphere049,particleSystem5,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track049,sphere049,-8, 9.57, 79.6,0);
+makeparticle(sphere049cl1,particleSystem6,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track049,sphere049cl1,-8, 9.57, 79.6,6000);
+
+const track053 = [];//管道Brep.053的轨迹
+track053.push(new slide(3.5,"up"));  //first side length 6
+track053.push(new slide(3.5+20,"front")); //at finish of second side distance covered is 18+9
+track053.push(new slide(3.5+20+158.8,"right")); //at finish of second side distance covered is 18+9
+track053.push(new slide(3.5+20+158.8+41,"front")); //at finish of second side distance covered is 18+9
+track053.push(new slide(3.5+20+158.8+41+104.2,"up")); //at finish of second side distance covered is 18+9
+track053.push(new slide(3.5+20+158.8+41+104.2+17.4,"left")); 
+track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6,"down")); 
+track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6+20.9,"left"));
+track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6+20.9+4.3,"up")); //最后一条 共59.3
+var particleSystem7=new BABYLON.ParticleSystem(`particles7`,10000,scene);
+var particleSystem8=new BABYLON.ParticleSystem(`particles8`,10000,scene);
+var particleSystem9=new BABYLON.ParticleSystem(`particles9`,10000,scene);
+var particleSystem10=new BABYLON.ParticleSystem(`particles10`,10000,scene);
+
+//创建一个紫色的粒子系统
+makeparticle(sphere053,particleSystem7,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track053,sphere053,25.3, 27.6, 61.4,1000);
+makeparticle(sphere053cl1,particleSystem8,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track053,sphere053cl1,25.3, 27.6, 61.4,6000);
+makeparticle(sphere053cl2,particleSystem9,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track053,sphere053cl2,25.3, 27.6, 61.4,12000);
+makeparticle(sphere053cl3,particleSystem10,
+    new BABYLON.Color4(0.68, 0, 1),
+    new BABYLON.Color4(0.77, 0.24, 0.93),
+    new BABYLON.Color4(0.71, 0.44, 0.89));
+moveparticle(track053,sphere053cl3,25.3, 27.6, 61.4,18000);
+
+function particlestart(){
+    particleSystem1.start();//Brep044
+    // particleSystem2.start();
+    particleSystem3.start();//Brep008
+    // particleSystem4.start();
+    particleSystem5.start();//Brep049
+    // particleSystem6.start();
+    particleSystem7.start();//Brep053
+    particleSystem8.start();
+    particleSystem9.start();
+    particleSystem10.start();
+}
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-    "modelv6d.gltf",
+    "updatedmodel.glb",
     scene,
     function (Meshes) {
+        changematerial();
+        particlestart();
         var importedMesh = Meshes[0];
+        // console.log(Meshes);
         importedMesh.getChildren().forEach(function (mesh){
             //仅为json文件中存在的设备绑定事件
             if(getJson(mesh.id) !== '暂无设备信息'){
+                childMesh.push(mesh);
+                mesh.actionManager = actionManager;
+            }
+            if(getPipeJson(mesh.id) !== '暂无设备信息'){
                 childMesh.push(mesh);
                 mesh.actionManager = actionManager;
             }
@@ -383,7 +653,7 @@ function setWarningPosition(warningModels){
 
 scene.registerBeforeRender(function(){
 
-    setWarningPosition(warningModels);
+    // setWarningPosition(warningModels);
 
     //计算帧率
     var fps = engine.getFps().toFixed();
