@@ -1,4 +1,4 @@
-import {objectArray, idToIndexMap, createWarningMessage, deleteWarningMessage} from './main.js'
+import {objectArray,pipeArray, idToIndexMap1,idToIndexMap2, createWarningMessage, deleteWarningMessage} from './main.js'
 import path from 'path-browserify'
 import {mqtt_config, http_config} from "./config.js";
 import {back_btn} from "./ui.js";
@@ -89,7 +89,7 @@ function onSubscribeFailure(){
 
 
 export function getJson(labelName,property){
-    let targetObject = objectArray[idToIndexMap[labelName]]
+    let targetObject = objectArray[idToIndexMap1[labelName]]
 
     if(targetObject){
         if(property === 'Name'){
@@ -118,7 +118,25 @@ export function getJson(labelName,property){
         return "暂无设备信息"
     }
 }
+export function getPipeJson(labelName,property){
+    let targetObject = pipeArray[idToIndexMap2[labelName]]
 
+    if(targetObject){
+        if(property === 'Name'){
+            return targetObject.Name;
+        }
+        else if(property === 'Info')
+        {
+            if(targetObject.info){
+                return targetObject.info;
+            }
+            return "暂无设备信息";
+        }
+
+    }else {
+        return "暂无设备信息"
+    }
+}
 export function getPDF(labelName){
     let Manual = getJson(labelName,'Manual');
 
