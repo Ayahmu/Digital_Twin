@@ -84,7 +84,7 @@ const engine = new BABYLON.Engine(canvas,true,{stencil:true});
 //创建场景
 const scene = new BABYLON.Scene(engine,false);
 // const hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("texture/hdr/environment.env", scene);
-var hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/env3.hdr", scene, 1024);
+let hdrTexture = new BABYLON.HDRCubeTexture("texture/hdr/env3.hdr", scene, 1024);
 scene.environmentTexture = hdrTexture;
 scene.createDefaultSkybox(hdrTexture, true);
 scene.environmentIntensity = 0.4;
@@ -161,7 +161,7 @@ actionManager.registerAction(
             switch (event.meshUnderPointer.id){
                 default:
                     displayLabel(event);
-                    var pickInfo = scene.pick(scene.pointerX, scene.pointerY);
+                    let pickInfo = scene.pick(scene.pointerX, scene.pointerY);
 
                     if (pickInfo.hit) {
                         // 鼠标点击位置的世界坐标
@@ -176,12 +176,12 @@ actionManager.registerAction(
 );
 
 function displayLabel(event){
-    var rightLabel = document.getElementById("rightLabel");
+    let rightLabel = document.getElementById("rightLabel");
 
-    var modelNameElm = document.getElementById("modelName");
+    let modelNameElm = document.getElementById("modelName");
     modelNameElm.innerHTML = getJson(event.meshUnderPointer.id,'Name');
 
-    var modelInfoElm = document.getElementById("modelInfo");
+    let modelInfoElm = document.getElementById("modelInfo");
     modelInfoElm.innerHTML = getJson(event.meshUnderPointer.id,"Info");
 
     if(!rightLabel.style.display){
@@ -195,7 +195,7 @@ function displayLabel(event){
 let rmLabelBuild = []
 
 function createLabel(event){
-    var label = new GUI.Rectangle();
+    let label = new GUI.Rectangle();
     label.background = "rgba(0, 0, 0, 1)";
     label.height = "60px";
     label.alpha = 0.6;
@@ -205,7 +205,7 @@ function createLabel(event){
     label.linkOffsetY = -100;
     advancedTexture.addControl(label);
     label.linkWithMesh(event.meshUnderPointer);
-    var text1 = new GUI.TextBlock();
+    let text1 = new GUI.TextBlock();
     text1.text = getJson(event.meshUnderPointer.id,"Name");
     text1.color = "white";
     label.addControl(text1);
@@ -229,7 +229,7 @@ function createLabel(event){
 //     label.height = "300px";
 //     advancedTexture.addControl(label);
 //     label.linkWithMesh(model);
-//     var text1 = new GUI.TextBlock();
+//     let text1 = new GUI.TextBlock();
 //     text1.text = "报警信息名称:"+getJson(modelID,"Name")  +"\n"+ "报警信息报警信息报警信息报警信息报警信息报警信息";
 //     text1.color = "white";
 //     label.addControl(text1);
@@ -238,7 +238,7 @@ function createLabel(event){
 //     rmLabelBuild.push(text1);
 // }
 
-var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+let advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 advancedTexture.renderScale = 1;
 
 let selectMesh, selectName;
@@ -411,19 +411,19 @@ let sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:0.01, segments
 sphere.position=new BABYLON.Vector3(51, 25, 91);
 let sphere004cl1=sphere.clone("sphere004cl1");
 sphere004cl1.position=new BABYLON.Vector3(51, 25, 91);
-var sphere008=sphere.clone("sphere008");
+let sphere008=sphere.clone("sphere008");
 sphere008.position=new BABYLON.Vector3(3.5, 27.8, 71.8);
-var sphere008cl1=sphere008.clone("sphere008cl1");
-var sphere049=sphere.clone("sphere008");
+let sphere008cl1=sphere008.clone("sphere008cl1");
+let sphere049=sphere.clone("sphere008");
 sphere049.position=new BABYLON.Vector3(-8, 9.57, 79.6);
-var sphere049cl1=sphere049.clone("sphere049cl1");
-var sphere053=sphere.clone("sphere053");
+let sphere049cl1=sphere049.clone("sphere049cl1");
+let sphere053=sphere.clone("sphere053");
 sphere053.position=new BABYLON.Vector3(25.3, 27.6, 61.4);
-var sphere053cl1=sphere053.clone("sphere053cl1");
-var sphere053cl2=sphere053.clone("sphere053cl2");
-var sphere053cl3=sphere053.clone("sphere053cl3");
+let sphere053cl1=sphere053.clone("sphere053cl1");
+let sphere053cl2=sphere053.clone("sphere053cl2");
+let sphere053cl3=sphere053.clone("sphere053cl3");
 
-// var sphere053cl6=sphere053.clone("sphere053cl6");
+// let sphere053cl6=sphere053.clone("sphere053cl6");
 
 
 const track044 = [];//管道Brep.044的轨迹
@@ -460,8 +460,8 @@ track008.push(new slide(3.4+16.5+0.2+27.1,"left")); //at finish of second side d
 track008.push(new slide(3.4+16.5+0.2+27.1+18.3,"front")); //at finish of second side distance covered is 18+9
 track008.push(new slide(3.4+16.5+0.2+27.1+18.3+3.5,"down")); //最后一条共70.3
 
-var particleSystem3=new BABYLON.ParticleSystem(`particles3`,10000,scene);//自动给每个粒子系统编号
-var particleSystem4=new BABYLON.ParticleSystem(`particles4`,10000,scene);//自动给每个粒子系统编号
+let particleSystem3=new BABYLON.ParticleSystem(`particles3`,10000,scene);//自动给每个粒子系统编号
+let particleSystem4=new BABYLON.ParticleSystem(`particles4`,10000,scene);//自动给每个粒子系统编号
 //创建一个绿色的粒子系统
 makeparticle(sphere008,particleSystem3,
     new BABYLON.Color4(0.17, 0.97, 0.02),
@@ -483,8 +483,8 @@ track049.push(new slide(4.3+22+10.2+0+46+23.3,"front"));
 track049.push(new slide(4.3+22+10.2+0+46+23.3+2.5,"right")); 
 track049.push(new slide(4.3+22+10.2+0+46+23.3+2.5+3.5,"down")); //最后一条共70.3
 
-var particleSystem5=new BABYLON.ParticleSystem(`particles5`,10000,scene);
-var particleSystem6=new BABYLON.ParticleSystem(`particles6`,10000,scene);
+let particleSystem5=new BABYLON.ParticleSystem(`particles5`,10000,scene);
+let particleSystem6=new BABYLON.ParticleSystem(`particles6`,10000,scene);
 //创建一个紫色的粒子系统
 makeparticle(sphere049,particleSystem5,
     new BABYLON.Color4(0.68, 0, 1),
@@ -507,10 +507,10 @@ track053.push(new slide(3.5+20+158.8+41+104.2+17.4,"left"));
 track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6,"down")); 
 track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6+20.9,"left"));
 track053.push(new slide(3.5+20+158.8+41+104.2+17.4+9.6+20.9+4.3,"up")); //最后一条 共59.3
-var particleSystem7=new BABYLON.ParticleSystem(`particles7`,10000,scene);
-var particleSystem8=new BABYLON.ParticleSystem(`particles8`,10000,scene);
-var particleSystem9=new BABYLON.ParticleSystem(`particles9`,10000,scene);
-var particleSystem10=new BABYLON.ParticleSystem(`particles10`,10000,scene);
+let particleSystem7=new BABYLON.ParticleSystem(`particles7`,10000,scene);
+let particleSystem8=new BABYLON.ParticleSystem(`particles8`,10000,scene);
+let particleSystem9=new BABYLON.ParticleSystem(`particles9`,10000,scene);
+let particleSystem10=new BABYLON.ParticleSystem(`particles10`,10000,scene);
 
 //创建一个紫色的粒子系统
 makeparticle(sphere053,particleSystem7,
@@ -549,21 +549,13 @@ function particlestart(){
 BABYLON.SceneLoader.ImportMesh(
     "",
     "model/",
-<<<<<<< HEAD
-    "modelv7d.gltf",
-=======
-    "updatedmodel.glb",
->>>>>>> git-test/master
+    "modelv8d.gltf",
     scene,
     function (Meshes) {
         changematerial();
         particlestart();
-        var importedMesh = Meshes[0];
-<<<<<<< HEAD
-        console.log(Meshes);
-=======
+        let importedMesh = Meshes[0];
         // console.log(Meshes);
->>>>>>> git-test/master
         importedMesh.getChildren().forEach(function (mesh){
             //仅为json文件中存在的设备绑定事件
             if(getJson(mesh.id) !== '暂无设备信息'){
@@ -604,11 +596,11 @@ scene.onPointerObservable.add((pointerInfo) => {
 let warningModels = new Map();
 
 export function createWarningMessage(modelID,url){
-    var warningModel = scene.getMeshById(modelID);
+    let warningModel = scene.getMeshById(modelID);
 
     //生成报警图标
-    var bellElement = document.getElementById("bell")
-    var clonedIcon = bellElement.cloneNode(true);
+    let bellElement = document.getElementById("bell")
+    let clonedIcon = bellElement.cloneNode(true);
     //标签id为模型id
     clonedIcon.id = modelID;
     bellElement.parentNode.appendChild(clonedIcon);
@@ -622,7 +614,7 @@ export function createWarningMessage(modelID,url){
     warningModels.set(clonedIcon, warningModel)
 
     //取消默认点击事件
-    var inputElement = clonedIcon.querySelector("input");
+    let inputElement = clonedIcon.querySelector("input");
     inputElement.addEventListener("click", function(event){
         event.preventDefault();
     });
@@ -643,17 +635,20 @@ export function deleteWarningMessage(modelID){
 }
 
 
-var renderWidth = engine.getRenderingCanvas().width;
-var renderHeight = engine.getRenderingCanvas().height;
-var viewport = scene.activeCamera.viewport;
+let renderWidth = engine.getRenderingCanvas().width;
+let renderHeight = engine.getRenderingCanvas().height;
+let viewport = scene.activeCamera.viewport;
 viewport.toGlobal(renderWidth, renderHeight);
-var worldMatrix = scene.getTransformMatrix();
+let worldMatrix = scene.getTransformMatrix();
 function setWarningPosition(warningModels){
     warningModels.forEach(function (value, key){
-        var modelPosition = value.getAbsolutePosition();
+        if(!value){
+            return;
+        }
+        let modelPosition = value.getAbsolutePosition();
         const transformMatrix = BABYLON.Matrix.Identity();
         transformMatrix.multiply(worldMatrix);
-        var screenPosition = BABYLON.Vector3.Project(modelPosition, transformMatrix, scene.getTransformMatrix(), viewport);
+        let screenPosition = BABYLON.Vector3.Project(modelPosition, transformMatrix, scene.getTransformMatrix(), viewport);
 
         key.style.top = screenPosition.y * 100 + "%"
         key.style.left = screenPosition.x * 100 + "%"
@@ -664,12 +659,12 @@ function setWarningPosition(warningModels){
 
 scene.registerBeforeRender(function(){
 
-    // setWarningPosition(warningModels);
+    setWarningPosition(warningModels);
 
     //计算帧率
-    var fps = engine.getFps().toFixed();
+    let fps = engine.getFps().toFixed();
 
-    var fpsDisplay = document.getElementById("fpsDisplay");
+    let fpsDisplay = document.getElementById("fpsDisplay");
     fpsDisplay.innerHTML = "FPS:" + fps;
 })
 
