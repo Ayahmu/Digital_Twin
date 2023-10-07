@@ -319,6 +319,16 @@ function changematerial(){
         carbonmaterial.alpha=0.3;
         pipe3.material = carbonmaterial;
         pipe4.material = carbonmaterial;
+        //水管道
+        let pipe5=scene.getMeshById("Brep.041")
+        let pipe6=scene.getMeshById("Brep.042")
+        let watermaterial= new BABYLON.PBRMaterial("watermaterial", scene) //创建pbr 二氧化碳管道材料
+        watermaterial.albedoColor=new BABYLON.Color3.Blue(); // 反射颜色
+        watermaterial.metallic=0.5 // 金属
+        watermaterial.roughness=0.5 // 粗糙
+        watermaterial.alpha=0.3;
+        pipe5.material = watermaterial;
+        pipe6.material = watermaterial;
         //隔板材质
         let clapboard1=scene.getMeshById("Brep");
         let clapboard2=scene.getMeshById("Brep.091");
@@ -348,8 +358,8 @@ function makeparticle(mesh,particleSystem,color1,color2,colorDead){
     particleSystem.minSize = 0.3;
     particleSystem.maxSize = 0.5;
     // Life time of each particle (random between...
-    particleSystem.minLifeTime = 2;
-    particleSystem.maxLifeTime = 3;
+    particleSystem.minLifeTime = 1.5;
+    particleSystem.maxLifeTime = 2.0;
     particleSystem.minEmitBox = new BABYLON.Vector3(0.08, 0.08, 0.08); //控制盒子
     particleSystem.maxEmitBox = new BABYLON.Vector3(-0.08, -0.08, -0.08);
     // Emission rate
@@ -366,7 +376,7 @@ const slide = function (dist,movdirection) { //after covering dist apply turn
 function moveparticle(track,mesh,x,y,z,time){
     setTimeout(function(){
         let distance = 0;
-        let step = 0.8;
+        let step = 1;
         let p = 0;
         scene.onBeforeRenderObservable.add(() => {
             if(track[p].movdirection==="left"){
@@ -419,9 +429,19 @@ sphere049.position=new BABYLON.Vector3(-8, 9.57, 79.6);
 let sphere049cl1=sphere049.clone("sphere049cl1");
 let sphere053=sphere.clone("sphere053");
 sphere053.position=new BABYLON.Vector3(25.3, 27.6, 61.4);
-let sphere053cl1=sphere053.clone("sphere053cl1");
-let sphere053cl2=sphere053.clone("sphere053cl2");
-let sphere053cl3=sphere053.clone("sphere053cl3");
+var sphere053cl1=sphere053.clone("sphere053cl1");
+var sphere053cl2=sphere053.clone("sphere053cl2");
+var sphere053cl3=sphere053.clone("sphere053cl3");
+var sphere041=sphere.clone("sphere041");
+sphere041.position=new BABYLON.Vector3(-71.05, 25.64, 35.54);
+var sphere041cl1=sphere041.clone("sphere041cl1");
+var sphere041cl2=sphere041.clone("sphere041cl2");
+var sphere041cl3=sphere041.clone("sphere041cl3");
+var sphere042=sphere.clone("sphere042");
+sphere042.position=new BABYLON.Vector3(-81,161.5,41.4);
+var sphere042cl1=sphere042.clone("sphere042cl1");
+var sphere042cl2=sphere042.clone("sphere042cl2");
+var sphere042cl3=sphere042.clone("sphere042cl3");
 
 // let sphere053cl6=sphere053.clone("sphere053cl6");
 
@@ -534,6 +554,69 @@ makeparticle(sphere053cl3,particleSystem10,
     new BABYLON.Color4(0.71, 0.44, 0.89));
 moveparticle(track053,sphere053cl3,25.3, 27.6, 61.4,18000);
 
+const track041 = [];//管道Brep.041的轨迹
+track041.push(new slide(81.06,"up"));  //first side length 6
+track041.push(new slide(81.06+73.94,"front")); //at finish of second side distance covered is 18+9
+track041.push(new slide(81.06+73.94+54.7,"up")); //at finish of second side distance covered is 18+9
+track041.push(new slide(81.06+73.94+54.7+12.6,"right")); //at finish of second side distance covered is 18+9
+var particleSystem11=new BABYLON.ParticleSystem(`particles11`,10000,scene);
+var particleSystem12=new BABYLON.ParticleSystem(`particles12`,10000,scene);
+var particleSystem13=new BABYLON.ParticleSystem(`particles13`,10000,scene);
+var particleSystem14=new BABYLON.ParticleSystem(`particles14`,10000,scene);
+//创建一个蓝色的粒子系统
+makeparticle(sphere041,particleSystem11,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track041,sphere041,-71.1, 25.64, 35.54,1000);
+makeparticle(sphere041cl1,particleSystem12,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track041,sphere041cl1,-71.1, 25.64, 35.54,6000);
+makeparticle(sphere041cl2,particleSystem13,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track041,sphere041cl2,-71.1, 25.64, 35.54,12000);
+makeparticle(sphere041cl3,particleSystem14,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track041,sphere041cl3,-71.1, 25.64, 35.54,18000);
+
+const track042 = [];//管道Brep.042的轨迹
+track042.push(new slide(7,"left"));  //first side length 6
+track042.push(new slide(7+56.9,"down")); //at finish of second side distance covered is 18+9
+track042.push(new slide(7+56.9+30.9,"front")); //at finish of second side distance covered is 18+9
+track042.push(new slide(7+56.9+30.9+38.4,"right")); //at finish of second side distance covered is 18+9
+track042.push(new slide(7+56.9+30.9+38.4+72.98,"down")); //at finish of second side distance covered is 18+9
+var particleSystem15=new BABYLON.ParticleSystem(`particles15`,10000,scene);
+var particleSystem16=new BABYLON.ParticleSystem(`particles16`,10000,scene);
+var particleSystem17=new BABYLON.ParticleSystem(`particles17`,10000,scene);
+var particleSystem18=new BABYLON.ParticleSystem(`particles18`,10000,scene);
+//创建一个蓝色的粒子系统
+makeparticle(sphere042,particleSystem15,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track042,sphere042,-81,161.5,41.4,1000);
+makeparticle(sphere042cl1,particleSystem16,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track042,sphere042cl1,-81,161.5,41.4,6000);
+makeparticle(sphere042cl2,particleSystem17,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track042,sphere042cl2,-81,161.5,41.4,12000);
+makeparticle(sphere042cl3,particleSystem18,
+    new BABYLON.Color4(0, 0.22, 1),
+    new BABYLON.Color4(0.11, 0.19, 0.89),
+    new BABYLON.Color4(0.44, 0.54, 0.85));
+moveparticle(track042,sphere042cl3,-81,161.5,41.4,18000);
+
 function particlestart(){
     particleSystem1.start();//Brep044
     // particleSystem2.start();
@@ -545,6 +628,14 @@ function particlestart(){
     particleSystem8.start();
     particleSystem9.start();
     particleSystem10.start();
+    particleSystem11.start();//Brep041
+    particleSystem12.start();
+    particleSystem13.start();
+    particleSystem14.start();
+    particleSystem15.start();//Brep042
+    particleSystem16.start();
+    particleSystem17.start();
+    particleSystem18.start();
 }
 BABYLON.SceneLoader.ImportMesh(
     "",
